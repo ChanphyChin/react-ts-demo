@@ -14,9 +14,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
-          <Route path="/">
-            <Login />
-          </Route>
+          <Route path="/" component={Login} />
         </Switch>
     </Router>
   </React.StrictMode>,
