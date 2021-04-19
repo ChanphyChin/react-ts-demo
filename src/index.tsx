@@ -1,20 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 import './index.less';
 import reportWebVitals from './reportWebVitals';
-import { Login } from './views/login';
+import {
+  Login,
+  PageNotFound
+} from './views';
+import { ProvideAuth, config } from './routes';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
-          <Route path="/" component={Login} />
+          <Route path="/login" component={Login} />
+          <Route path="/404" component={PageNotFound} />
+        {config.map(route => {
+          return <ProvideAuth key={route.path} route={route}/>
+        })}
+          
         </Switch>
     </Router>
   </React.StrictMode>,
