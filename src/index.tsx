@@ -7,23 +7,19 @@ import {
 } from "react-router-dom";
 import './index.less';
 import reportWebVitals from './reportWebVitals';
-import {
-  Login,
-  PageNotFound
-} from './views';
-import { ProvideAuth, config } from './routes';
+import { ProvideAuth, baseRoutesConfig, routesConfig } from './routes';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <Switch>
-          <Route path="/login" component={Login} />
-          <Route path="/404" component={PageNotFound} />
-        {config.map(route => {
-          return <ProvideAuth key={route.path} route={route}/>
-        })}
-          
-        </Switch>
+          {baseRoutesConfig.map(route => {
+            return <Route key={route.path} path={route.path} component={route.component} />
+          })}
+          {routesConfig.map(route => {
+            return <ProvideAuth key={route.path} route={route}/>
+          })}
+      </Switch>
     </Router>
   </React.StrictMode>,
   document.getElementById('root')

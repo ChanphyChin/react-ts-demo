@@ -1,31 +1,50 @@
-import { Component, createElement } from 'react';
-import { Layout, Menu } from 'antd';
+import { useState } from 'react';
+import { Layout, Menu, Dropdown } from 'antd';
 import {
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
     UserOutlined,
     VideoCameraOutlined,
     UploadOutlined,
 } from '@ant-design/icons';
+import {
+    Switch,
+    Route,
+    Redirect,
+    useHistory
+} from "react-router-dom";
+import { routesConfig } from '../../routes';
+import { IRoute } from '../../types';
 
 const { Header, Sider, Content } = Layout;
 
-export class Home extends Component {
-    state = {
-        collapsed: false,
+export const Home = () => {
+    const [ collapsed, setCollapsed ] = useState(false);
+    const history = useHistory();
+    const toggle = () => {
+        setCollapsed(!collapsed);
     };
-
-    toggle = () => {
-        this.setState({
-            collapsed: !this.state.collapsed,
-        });
-    };
-
-    render() {
-        console.log(this);
-        return (
-            <Layout style={{ height: '100%' }}>
-                <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+    const handleMenuClick = () => {
+        sessionStorage.removeItem('token');
+        history.push('/login');
+    }
+    const menu = (
+        <Menu onClick={handleMenuClick}>
+        <Menu.Item key="3">
+            logout
+        </Menu.Item>
+        </Menu>
+    );
+    const homeRoutes = routesConfig.find(item => item.name === 'home');
+    const homeChildrenRoutes: Array<IRoute> | undefined = homeRoutes && homeRoutes.children;
+    return (
+        <Layout style={{ height: '100%' }}>
+            <Header style={{ textAlign: 'right' }}>
+                <Dropdown overlay={menu} placement="bottomCenter">
+                    <UserOutlined style={{ fontSize: 30, color: '#fff' }}/>
+                </Dropdown>
+            </Header>
+            <Content>
+                <Layout style={{ height: '100%' }}>
+                    <Sider trigger={toggle} collapsible collapsed={collapsed}>
                     <div className="logo" />
                     <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
                     <Menu.Item key="1" icon={<UserOutlined />}>
@@ -40,12 +59,6 @@ export class Home extends Component {
                     </Menu>
                 </Sider>
                 <Layout className="site-layout">
-                    <Header className="site-layout-background" style={{ padding: 0 }}>
-                    {createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                        className: 'trigger',
-                        onClick: this.toggle,
-                    })}
-                    </Header>
                     <Content
                     className="site-layout-background"
                     style={{
@@ -54,10 +67,21 @@ export class Home extends Component {
                         minHeight: 280,
                     }}
                     >
-                    Content
+                        <Switch>
+                            {
+                                homeChildrenRoutes && homeChildrenRoutes.map(item => {
+                                    return <Route key={item.path} path={item.path} component={item.component}/>
+                                })
+                            }
+                            <Redirect from="*" to="/home/dasheboard" /> 
+                        </Switch>
                     </Content>
                 </Layout>
-            </Layout>
-        );
-    }
+                </Layout>
+            </Content>
+        </Layout>
+    );
 }
+
+export { Dasheboard } from './dasheboard';
+export { LayoutContainer } from './layout-container';

@@ -2,23 +2,34 @@ import { IRoute } from '../types';
 import {
     Login,
     Home,
-    PageNotFound
+    PageNotFound,
+    Dasheboard
 } from '../views';
-export const config: Array<IRoute> = [
-    {
-        path: '/home',
-        name: 'home',
-        component: Home,
-        auth: true
-    },
+export const baseRoutesConfig: Array<IRoute> = [
     {
         path: '/login',
         name: 'login',
         component: Login
     },
     {
-        path: '/pageNotFound',
+        path: '/404',
         name: 'pageNotFound',
         component: PageNotFound
+    },
+];
+export const routesConfig: Array<IRoute> = [
+    {
+        path: '/home',
+        name: 'home',
+        component: Home,
+        auth: true,
+        children: [
+            {
+                path: '/home/dasheboard',
+                name: 'dasheboard',
+                component: Dasheboard,
+                auth: true,
+            }
+        ]
     },
 ];
