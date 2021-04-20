@@ -54,5 +54,5 @@ export const Login = () => {
             </Button>
             </Form.Item>
         </Form>
-        );
+    );
 }

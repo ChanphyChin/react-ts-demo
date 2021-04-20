@@ -13,8 +13,9 @@ import {
 } from "react-router-dom";
 import { routesConfig } from '../../routes';
 import { IRoute } from '../../types';
+import { PublicHeader } from '../../components';
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 
 export const Home = () => {
     const [ collapsed, setCollapsed ] = useState(false);
@@ -37,27 +38,23 @@ export const Home = () => {
     const homeChildrenRoutes: Array<IRoute> | undefined = homeRoutes && homeRoutes.children;
     return (
         <Layout style={{ height: '100%' }}>
-            <Header style={{ textAlign: 'right' }}>
-                <Dropdown overlay={menu} placement="bottomCenter">
-                    <UserOutlined style={{ fontSize: 30, color: '#fff' }}/>
-                </Dropdown>
-            </Header>
+            <PublicHeader />
             <Content>
                 <Layout style={{ height: '100%' }}>
-                    <Sider trigger={toggle} collapsible collapsed={collapsed}>
-                    <div className="logo" />
-                    <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                    <Menu.Item key="1" icon={<UserOutlined />}>
-                        nav 1
-                    </Menu.Item>
-                    <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                        nav 2
-                    </Menu.Item>
-                    <Menu.Item key="3" icon={<UploadOutlined />}>
-                        nav 3
-                    </Menu.Item>
-                    </Menu>
-                </Sider>
+                    <Sider trigger={null} collapsible collapsed={collapsed}>
+                        <div className="logo" />
+                        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+                        <Menu.Item key="1" icon={<UserOutlined />}>
+                            nav 1
+                        </Menu.Item>
+                        <Menu.Item key="2" icon={<VideoCameraOutlined />}>
+                            nav 2
+                        </Menu.Item>
+                        <Menu.Item key="3" icon={<UploadOutlined />}>
+                            nav 3
+                        </Menu.Item>
+                        </Menu>
+                    </Sider>
                 <Layout className="site-layout">
                     <Content
                     className="site-layout-background"
@@ -84,4 +81,3 @@ export const Home = () => {
 }
 
 export { Dasheboard } from './dasheboard';
-export { LayoutContainer } from './layout-container';
