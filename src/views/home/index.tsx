@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Layout, Menu } from 'antd';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { Layout, Menu, Button } from 'antd';
 import {
     UserOutlined,
     VideoCameraOutlined,
@@ -19,25 +19,44 @@ import { api } from '../../services';
 const { Sider, Content } = Layout;
 
 export const Home = () => {
+    const [ routes, setRoutes ] = useState([]);
     const history = useHistory();
     const location = useLocation();
 
     useEffect(() => {
         api.get({
             apiRoot: 'http://192.168.0.11:4000',
-            apiPath: '/home',
-        })
+            apiPath: '/home_routes',
+        }).then(res => {
+            setRoutes(res);
+        });
     }, [])
 
-    const getSelectedKeys = useMemo(() => {
+    const selectedKeys = useMemo(() => {
         return [location.pathname];
     }, [location.pathname]);
+
+    const homeRoutes = routesConfig.find(item => item.name === 'home');
+    const homeChildrenRoutes: Array<IRoute> | undefined = useMemo(() => {
+        return (homeRoutes && homeRoutes.children) || [];
+    }, [homeRoutes]);
+
+    const getRoutes = useCallback(() => {
+        const currentRoutes = routes.reduce((result: IRoute[], path: string) => {
+            for(let child of homeChildrenRoutes) {
+                if(child.path === path) {
+                    result.push(child);
+                }
+            }
+            return result;
+        }, []);
+        return currentRoutes;
+    }, [routes, homeChildrenRoutes]);
 
     const onMenuChange = (key: string) => {
         history.push(key);
     }
-    const homeRoutes = routesConfig.find(item => item.name === 'home');
-    const homeChildrenRoutes: Array<IRoute> | undefined = homeRoutes && homeRoutes.children;
+    
     return (
         <Layout style={{ height: '100%' }}>
             <PublicHeader />
@@ -45,7 +64,7 @@ export const Home = () => {
                 <Layout style={{ height: '100%' }}>
                     <Sider trigger={null} collapsible>
                         <div className="logo" />
-                        <Menu theme="dark" mode="inline" selectedKeys={getSelectedKeys} onSelect={({ key }) => onMenuChange(key as string)}>
+                        <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} onSelect={({ key }) => onMenuChange(key as string)}>
                             <Menu.Item key="/home/dasheboard" icon={<UserOutlined />}>
                                 dasheboard
                             </Menu.Item>
@@ -63,9 +82,10 @@ export const Home = () => {
                         minHeight: 280,
                     }}
                     >
+                        {!routes.length && <Button>获取子路由</Button>}
                         <Switch>
                             {
-                                homeChildrenRoutes && homeChildrenRoutes.map(item => {
+                                getRoutes().map(item => {
                                     return <Route key={item.path} path={item.path} component={item.component}/>
                                 })
                             }
