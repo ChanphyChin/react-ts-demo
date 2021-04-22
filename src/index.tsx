@@ -4,11 +4,13 @@ import {
   HashRouter as Router,
   Switch,
   Route,
+  Redirect
 } from "react-router-dom";
+import 'antd/dist/antd.css';
 import './index.less';
+import './services';
 import reportWebVitals from './reportWebVitals';
-import { ProvideAuth, baseRoutesConfig, routesConfig } from './routes';
-
+import { baseRoutesConfig, routesConfig } from './routes';
 ReactDOM.render(
   <React.StrictMode>
     <Router>
@@ -17,8 +19,9 @@ ReactDOM.render(
             return <Route key={route.path} path={route.path} component={route.component} />
           })}
           {routesConfig.map(route => {
-            return <ProvideAuth key={route.path} route={route}/>
+            return <Route key={route.path} path={route.path} component={route.component} />
           })}
+          <Redirect from='*' to='/home' />
       </Switch>
     </Router>
   </React.StrictMode>,

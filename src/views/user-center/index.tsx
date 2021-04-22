@@ -1,11 +1,9 @@
-import React from 'react';
-
-const UserCenter = () => {
+import { PublicHeader } from '../../components';
+export const UserCenter = () => {
   return (
     <div>
+      <PublicHeader />
       UserCenter
     </div>
   );
 }
-
-export default UserCenter;

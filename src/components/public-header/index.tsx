@@ -3,6 +3,7 @@ import {
     UserOutlined,
 } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
+import { api } from '../../services';
 
 const { Header } = Layout;
 
@@ -15,15 +16,31 @@ export const PublicHeader = (props: PublicHeaderProp) => {
   const handleMenuClick = (key: string) => {
     const { onClick } = props;
     onClick && onClick(key);
-    sessionStorage.removeItem('token');
-    history.push('/login');
+    console.log(key);
+    if(key === '/login') {
+      api.post({
+        apiRoot: 'http://192.168.0.11:4000',
+        apiPath: '/logout',
+      }).then(res => {
+          sessionStorage.removeItem('token');
+          history.push('/login');
+      })
+    }else {
+      history.push(key);
+    }
   }
   const menu = (
     <Menu onClick={({ key }) => handleMenuClick(key as string)}>
-      <Menu.Item key="logout">
+      <Menu.Item key="/home">
+          Home
+      </Menu.Item>
+      <Menu.Item key="/userCenter">
+          User Center
+      </Menu.Item>
+      <Menu.Item key="/login">
           logout
       </Menu.Item>
-      </Menu>
+    </Menu>
   );
   return (
     <Header style={{ textAlign: 'right' }}>

@@ -1,39 +1,41 @@
-import { useState } from 'react';
-import { Layout, Menu, Dropdown } from 'antd';
+import { useState, useEffect, useMemo } from 'react';
+import { Layout, Menu } from 'antd';
 import {
     UserOutlined,
     VideoCameraOutlined,
-    UploadOutlined,
 } from '@ant-design/icons';
 import {
     Switch,
     Route,
     Redirect,
-    useHistory
+    useHistory,
+    useLocation
 } from "react-router-dom";
 import { routesConfig } from '../../routes';
 import { IRoute } from '../../types';
 import { PublicHeader } from '../../components';
+import { api } from '../../services';
 
 const { Sider, Content } = Layout;
 
 export const Home = () => {
-    const [ collapsed, setCollapsed ] = useState(false);
     const history = useHistory();
-    const toggle = () => {
-        setCollapsed(!collapsed);
-    };
-    const handleMenuClick = () => {
-        sessionStorage.removeItem('token');
-        history.push('/login');
+    const location = useLocation();
+
+    useEffect(() => {
+        api.get({
+            apiRoot: 'http://192.168.0.11:4000',
+            apiPath: '/home',
+        })
+    }, [])
+
+    const getSelectedKeys = useMemo(() => {
+        return [location.pathname];
+    }, [location.pathname]);
+
+    const onMenuChange = (key: string) => {
+        history.push(key);
     }
-    const menu = (
-        <Menu onClick={handleMenuClick}>
-        <Menu.Item key="3">
-            logout
-        </Menu.Item>
-        </Menu>
-    );
     const homeRoutes = routesConfig.find(item => item.name === 'home');
     const homeChildrenRoutes: Array<IRoute> | undefined = homeRoutes && homeRoutes.children;
     return (
@@ -41,18 +43,15 @@ export const Home = () => {
             <PublicHeader />
             <Content>
                 <Layout style={{ height: '100%' }}>
-                    <Sider trigger={null} collapsible collapsed={collapsed}>
+                    <Sider trigger={null} collapsible>
                         <div className="logo" />
-                        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                        <Menu.Item key="1" icon={<UserOutlined />}>
-                            nav 1
-                        </Menu.Item>
-                        <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-                            nav 2
-                        </Menu.Item>
-                        <Menu.Item key="3" icon={<UploadOutlined />}>
-                            nav 3
-                        </Menu.Item>
+                        <Menu theme="dark" mode="inline" selectedKeys={getSelectedKeys} onSelect={({ key }) => onMenuChange(key as string)}>
+                            <Menu.Item key="/home/dasheboard" icon={<UserOutlined />}>
+                                dasheboard
+                            </Menu.Item>
+                            <Menu.Item key="/home/redux" icon={<VideoCameraOutlined />}>
+                                redux
+                            </Menu.Item>
                         </Menu>
                     </Sider>
                 <Layout className="site-layout">
@@ -81,3 +80,4 @@ export const Home = () => {
 }
 
 export { Dasheboard } from './dasheboard';
+export { Redux } from './redux';

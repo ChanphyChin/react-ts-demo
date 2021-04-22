@@ -1,5 +1,6 @@
 import { Form, Input, Button, Checkbox } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { api } from '../../services';
 import './index.less';
 
 export const Login = () => {
@@ -12,6 +13,13 @@ export const Login = () => {
         wrapperCol: { offset: 8, span: 16 },
     };
     const onFinish = (values: any) => {
+        api.post({
+            apiRoot: 'http://192.168.0.11:4000',
+            apiPath: '/login',
+            params: values
+        }).then(res => {
+            console.log(res, 'res');
+        })
         sessionStorage.setItem('token', JSON.stringify(values));
         history.push('/home');
     };

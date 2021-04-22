@@ -3,7 +3,9 @@ import {
     Login,
     Home,
     PageNotFound,
-    Dasheboard
+    Dasheboard,
+    UserCenter,
+    Redux
 } from '../views';
 export const baseRoutesConfig: Array<IRoute> = [
     {
@@ -29,7 +31,19 @@ export const routesConfig: Array<IRoute> = [
                 name: 'dasheboard',
                 component: Dasheboard,
                 auth: true,
-            }
+            },
+            {
+                path: '/home/redux',
+                name: 'redux',
+                component: Redux,
+                auth: true,
+            },
         ]
+    },
+    {
+        path: '/userCenter',
+        name: 'userCenter',
+        component: UserCenter,
+        auth: true,
     },
 ];

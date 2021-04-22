@@ -1,3 +1,4 @@
-export { Home, Dasheboard } from './home';
-export { Login } from './login';
-export { PageNotFound } from './page-not-found';
+export * from './home';
+export * from './login';
+export * from './page-not-found';
+export * from './user-center';

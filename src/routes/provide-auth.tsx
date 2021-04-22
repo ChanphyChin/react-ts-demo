@@ -6,9 +6,14 @@ import {
 import { routesConfig } from './config';
 import { IRoute } from '../types';
 
-export function ProvideAuth (props: any): JSX.Element {
+interface ProvideAuthProps {
+    route: IRoute;
+}
+
+export function ProvideAuth (props: ProvideAuthProps): JSX.Element {
     const location = useLocation();
     const { pathname } = location;
+    console.log('in');
     const getAuthRoutes = (config: IRoute[]): IRoute[] => {
         let authRoutes: IRoute[] = []; 
         for(let item of config) {
@@ -37,6 +42,7 @@ export function ProvideAuth (props: any): JSX.Element {
     }
     const isPathExis = checkPathExis(pathname, routesConfig);
     const isLogin: string | null = sessionStorage.getItem('token');
+    console.log(props.route);
     if(isLogin) {
         if (pathname === '/') {
             return <Redirect from="*" to="/home" />;
