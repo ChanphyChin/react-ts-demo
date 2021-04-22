@@ -7,7 +7,6 @@ export const UserCenter = () => {
   const [user, setUser] = useState({username: ''});
   useEffect(() => {
     api.get({
-      apiRoot: 'http://192.168.0.11:4000',
       apiPath: '/user_info',
     }).then(res => {
       setUser(res);

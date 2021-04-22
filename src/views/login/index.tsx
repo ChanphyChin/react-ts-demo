@@ -14,7 +14,6 @@ export const Login = () => {
     };
     const onFinish = (values: any) => {
         api.post({
-            apiRoot: 'http://192.168.0.11:4000',
             apiPath: '/login',
             params: values
         }).then(res => {

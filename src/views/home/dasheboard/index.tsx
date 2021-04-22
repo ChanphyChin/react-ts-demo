@@ -27,7 +27,6 @@ export class Dasheboard extends Component<any, DasheboardState> {
   }
   getDataSource = (page: number) => {
     api.get({
-      apiRoot: 'http://192.168.0.11:4000',
       apiPath: '/dasheboard_table',
       params: {
         page,

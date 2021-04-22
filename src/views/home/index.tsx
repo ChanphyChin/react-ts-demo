@@ -25,7 +25,6 @@ export const Home = () => {
 
     useEffect(() => {
         api.get({
-            apiRoot: 'http://192.168.0.11:4000',
             apiPath: '/home_routes',
         }).then(res => {
             setRoutes(res);

@@ -19,7 +19,6 @@ export const PublicHeader = (props: PublicHeaderProp) => {
     console.log(key);
     if(key === '/login') {
       api.post({
-        apiRoot: 'http://192.168.0.11:4000',
         apiPath: '/logout',
       }).then(res => {
           sessionStorage.removeItem('token');

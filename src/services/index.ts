@@ -8,9 +8,11 @@ export const METHOD_DELETE: string = 'delete';
 
 const DEFAULT_METHOD: string = METHOD_GET;
 
+const baseApiRoot = 'http://192.168.0.11:4000';
+
 interface Config {
     method?: 'get'|'post'|'put'|'delete';
-    apiRoot: string;
+    apiRoot?: string;
     apiPath: string;
     params?: {
         [key:string]: any;
@@ -79,7 +81,7 @@ export const api: Api = {
     // WARN: 该方法内使用了指向 api 的 this, 因此不可使用箭头函数；
      // @ts-ignore
     api[method] = function(data: Config, config: Config) {
-        let { apiRoot, apiPath, params } = data;
+        let { apiRoot = baseApiRoot, apiPath, params } = data;
 
         config = Object.assign({}, config, {
             method,
