@@ -12,3 +12,6 @@
 ## `yarn mock`
 启动数据mock服务  
 服务地址：`http://localhost:4000`
+
+## 注意事项
+使用mock服务，需要设置`/.env`文件中的`REACT_APP_API_ROOT`为启动服务电脑的ip地址

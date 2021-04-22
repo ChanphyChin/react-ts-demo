@@ -8,7 +8,7 @@ export const METHOD_DELETE: string = 'delete';
 
 const DEFAULT_METHOD: string = METHOD_GET;
 
-const baseApiRoot = 'http://192.168.0.11:4000';
+const baseApiRoot = `http://${process.env.REACT_APP_API_ROOT}:4000`;
 
 interface Config {
     method?: 'get'|'post'|'put'|'delete';
