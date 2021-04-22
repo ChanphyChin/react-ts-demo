@@ -4,9 +4,11 @@
 
 ## `yarn start`
 运行开发环境  
-访问：http://localhost:3000，进行视图查看，调试
+访问：`http://localhost:3000`，进行视图查看，调试
+## `yarn test`
+运行单元测试模式
 ## `yarn build`
-构建生产环境项目
+构建生产环境项目 `/build`
 ## `yarn mock`
 启动数据mock服务  
-服务地址：http://localhost:4000
+服务地址：`http://localhost:4000`
