@@ -13,6 +13,9 @@
 启动数据mock服务  
 服务地址：`http://localhost:4000`
 
+## 注意事项
+使用mock服务，需要设置`/.env`文件中的`REACT_APP_API_ROOT`为启动服务电脑的ip地址
+
 ## react内置类型
 1. React.ReactElement —— 使用React.createElement创建的，可以简单理解为React中的JSX的元素
 2. React.ReactNode —— <div>xxx</div> xxx的合法类型
