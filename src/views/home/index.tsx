@@ -19,7 +19,7 @@ import { api } from '../../services';
 const { Sider, Content } = Layout;
 
 export const Home = () => {
-    const [ routes, setRoutes ] = useState([]);
+    const [ routes, setRoutes ] = useState<string[]>([]);
     const history = useHistory();
     const location = useLocation();
 

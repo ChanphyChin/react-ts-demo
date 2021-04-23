@@ -7,24 +7,30 @@ import {
   Redirect
 } from "react-router-dom";
 import 'antd/dist/antd.css';
+import { Provider } from 'react-redux'
+import { store } from './store';
+
 import './index.less';
 import './services';
 import reportWebVitals from './reportWebVitals';
 import { baseRoutesConfig, routesConfig } from './routes';
+
 ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <Switch>
-          {baseRoutesConfig.map(route => {
-            return <Route key={route.path} path={route.path} component={route.component} />
-          })}
-          {routesConfig.map(route => {
-            return <Route key={route.path} path={route.path} component={route.component} />
-          })}
-          <Redirect from='*' to='/home' />
-      </Switch>
-    </Router>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <React.StrictMode>
+      <Router>
+        <Switch>
+            {baseRoutesConfig.map(route => {
+              return <Route key={route.path} path={route.path} component={route.component} />
+            })}
+            {routesConfig.map(route => {
+              return <Route key={route.path} path={route.path} component={route.component} />
+            })}
+            <Redirect from='*' to='/home' />
+        </Switch>
+      </Router>
+    </React.StrictMode>
+  </Provider>,
   document.getElementById('root')
 );
 
