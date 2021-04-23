@@ -4,7 +4,7 @@ import { PublicHeader } from '../../components';
 import { api } from '../../services';
 
 export const UserCenter = () => {
-  const [user, setUser] = useState({username: ''});
+  const [user, setUser] = useState<{username: string}>({username: ''});
   useEffect(() => {
     api.get({
       apiPath: '/user_info',

@@ -14,18 +14,18 @@ export function ProvideAuth (props: ProvideAuthProps): JSX.Element {
     const location = useLocation();
     const { pathname } = location;
     console.log('in');
-    const getAuthRoutes = (config: IRoute[]): IRoute[] => {
-        let authRoutes: IRoute[] = []; 
-        for(let item of config) {
-            if(item.auth) {
-                authRoutes.push(item);
-            }
-            if(item.children) {
-                authRoutes.push(...getAuthRoutes(item.children));
-            }
-        }
-        return authRoutes;
-    }
+    // const getAuthRoutes = (config: IRoute[]): IRoute[] => {
+    //     let authRoutes: IRoute[] = []; 
+    //     for(let item of config) {
+    //         if(item.auth) {
+    //             authRoutes.push(item);
+    //         }
+    //         if(item.children) {
+    //             authRoutes.push(...getAuthRoutes(item.children));
+    //         }
+    //     }
+    //     return authRoutes;
+    // }
     const checkPathExis = (pathname: string, routesConfig: IRoute[]):boolean => {
         let isPathExis:boolean = false;
         for(let item of routesConfig) {
