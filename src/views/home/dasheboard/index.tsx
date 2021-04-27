@@ -25,6 +25,9 @@ export class Dasheboard extends Component<any, DasheboardState> {
       onChange: (page: number) => {}
     }
   }
+  componentDidMount() {
+    this.getDataSource(1);
+  }
   getDataSource = (page: number) => {
     api.get({
       apiPath: '/dasheboard_table',

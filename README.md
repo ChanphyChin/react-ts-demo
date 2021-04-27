@@ -1,5 +1,9 @@
 # 基于 Create React App
 
+## 安装依赖
+
+## `yarn install`
+
 ## 可用命令
 
 ## `yarn start`
