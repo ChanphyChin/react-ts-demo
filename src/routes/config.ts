@@ -5,7 +5,8 @@ import {
     PageNotFound,
     Dasheboard,
     UserCenter,
-    Redux
+    Redux,
+    TemplateManagement
 } from '../views';
 export const baseRoutesConfig: Array<IRoute> = [
     {
@@ -36,6 +37,12 @@ export const routesConfig: Array<IRoute> = [
                 path: '/home/redux',
                 name: 'redux',
                 component: Redux,
+                auth: true,
+            },
+            {
+                path: '/home/template-management',
+                name: 'template management',
+                component: TemplateManagement,
                 auth: true,
             },
         ]

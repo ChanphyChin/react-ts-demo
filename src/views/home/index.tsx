@@ -53,8 +53,11 @@ export const Home = () => {
     }, [routes, homeChildrenRoutes]);
 
     const onMenuChange = (key: string) => {
+        console.log(key);
         history.push(key);
     }
+
+    const childrenRoutes: Array<IRoute> = getRoutes();
     
     return (
         <Layout style={{ height: '100%' }}>
@@ -64,12 +67,11 @@ export const Home = () => {
                     <Sider trigger={null} collapsible>
                         <div className="logo" />
                         <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} onSelect={({ key }) => onMenuChange(key as string)}>
-                            <Menu.Item key="/home/dasheboard" icon={<UserOutlined />}>
-                                dasheboard
-                            </Menu.Item>
-                            <Menu.Item key="/home/redux" icon={<VideoCameraOutlined />}>
-                                redux
-                            </Menu.Item>
+                            {homeChildrenRoutes.map(item => (
+                                <Menu.Item key={item.path} >
+                                    {item.name}
+                                </Menu.Item>
+                            ))}
                         </Menu>
                     </Sider>
                 <Layout className="site-layout">
@@ -84,7 +86,7 @@ export const Home = () => {
                         {!routes.length && <Button>获取子路由</Button>}
                         <Switch>
                             {
-                                getRoutes().map(item => {
+                                childrenRoutes.map(item => {
                                     return <Route key={item.path} path={item.path} component={item.component}/>
                                 })
                             }
@@ -100,3 +102,4 @@ export const Home = () => {
 
 export { Dasheboard } from './dasheboard';
 export { Redux } from './redux';
+export { TemplateManagement } from './template-management';

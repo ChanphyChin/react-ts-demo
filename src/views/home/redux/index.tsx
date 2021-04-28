@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux'
-import { Button, InputNumber, Input } from 'antd';
+import { Button, InputNumber } from 'antd';
 import { StateInterface, addCounter, minusCounter } from '../../../store';
 
 interface ReduxProps {
