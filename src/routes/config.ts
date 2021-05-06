@@ -6,7 +6,8 @@ import {
     Dasheboard,
     UserCenter,
     Redux,
-    TemplateManagement
+    TemplateManagement,
+    TemplateEdit
 } from '../views';
 export const baseRoutesConfig: Array<IRoute> = [
     {
@@ -32,18 +33,28 @@ export const routesConfig: Array<IRoute> = [
                 name: 'dasheboard',
                 component: Dasheboard,
                 auth: true,
+                isMenu: true
             },
             {
                 path: '/home/redux',
                 name: 'redux',
                 component: Redux,
                 auth: true,
+                isMenu: true
             },
             {
                 path: '/home/template-management',
                 name: 'template management',
                 component: TemplateManagement,
                 auth: true,
+                isMenu: true
+            },
+            {
+                path: '/home/template-edit/:id',
+                name: 'template management',
+                component: TemplateEdit,
+                auth: true,
+                isMenu: false
             },
         ]
     },

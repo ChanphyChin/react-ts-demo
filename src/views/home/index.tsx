@@ -1,10 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Layout, Menu, Button } from 'antd';
 import {
-    UserOutlined,
-    VideoCameraOutlined,
-} from '@ant-design/icons';
-import {
     Switch,
     Route,
     Redirect,
@@ -39,7 +35,7 @@ export const Home = () => {
     const homeChildrenRoutes: Array<IRoute> | undefined = useMemo(() => {
         return (homeRoutes && homeRoutes.children) || [];
     }, [homeRoutes]);
-
+    // 从接口获取路由
     const getRoutes = useCallback(() => {
         const currentRoutes = routes.reduce((result: IRoute[], path: string) => {
             for(let child of homeChildrenRoutes) {
@@ -51,14 +47,18 @@ export const Home = () => {
         }, []);
         return currentRoutes;
     }, [routes, homeChildrenRoutes]);
+    
+    // 使用本地路由
+    // const getRoutes = () => {
+    //     return homeChildrenRoutes;
+    // }
 
     const onMenuChange = (key: string) => {
-        console.log(key);
         history.push(key);
     }
 
     const childrenRoutes: Array<IRoute> = getRoutes();
-    
+
     return (
         <Layout style={{ height: '100%' }}>
             <PublicHeader />
@@ -67,7 +67,7 @@ export const Home = () => {
                     <Sider trigger={null} collapsible>
                         <div className="logo" />
                         <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} onSelect={({ key }) => onMenuChange(key as string)}>
-                            {homeChildrenRoutes.map(item => (
+                            {homeChildrenRoutes.filter(item => item.isMenu).map(item => (
                                 <Menu.Item key={item.path} >
                                     {item.name}
                                 </Menu.Item>
@@ -103,3 +103,4 @@ export const Home = () => {
 export { Dasheboard } from './dasheboard';
 export { Redux } from './redux';
 export { TemplateManagement } from './template-management';
+export { TemplateEdit } from './template-edit';

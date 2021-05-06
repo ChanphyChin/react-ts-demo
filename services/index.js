@@ -48,7 +48,8 @@ app.get('/home_routes', (req, res) => {
     res.send([
         '/home/dasheboard',
         '/home/redux',
-        '/home/template-management'
+        '/home/template-management',
+        '/home/template-edit/:id'
     ])
 })
 

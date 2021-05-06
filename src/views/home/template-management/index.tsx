@@ -1,4 +1,5 @@
 import { Table, Button } from 'antd';
+import { useHistory } from 'react-router-dom';
 
 interface dataSourceInterface {
     id: string;
@@ -8,6 +9,10 @@ interface dataSourceInterface {
 }
 
 export const TemplateManagement = () => {
+    const history = useHistory();
+    const onEdit = (id: string) => {
+        history.push(`/home/template-edit/${id}`);
+    }
     const dataSource: dataSourceInterface[] = [
         {
             id: '1',
@@ -34,13 +39,14 @@ export const TemplateManagement = () => {
             key: 'remark',
         },
         {
-            title: 'Action',
+            title: '操作',
             key: 'action',
+            width: 300,
             render: (text: any, record: dataSourceInterface) => {
                 return(
                     <>
-                        <Button type='primary'>编辑</Button>
-                        <Button type='primary'>预览</Button>
+                        <Button type='primary' onClick={() => onEdit(record.id)}>编辑</Button>
+                        <Button type='primary' style={{ margin: '0 10px' }}>预览</Button>
                         <Button danger>删除</Button>
                     </>
                 );
@@ -49,7 +55,7 @@ export const TemplateManagement = () => {
     ];
     return (
         <div>
-        <Table dataSource={dataSource} columns={columns} />
+            <Table dataSource={dataSource} columns={columns} />
         </div>
     );
 }
