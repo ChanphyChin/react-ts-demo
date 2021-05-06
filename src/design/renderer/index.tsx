@@ -9,7 +9,7 @@ interface RendererProps {
             config: string;
         }
     } | undefined;
-    onRerenderIframe: () => void;
+    onRerenderIframe: (values: any) => void;
 }
 
 export class Renderer extends Component<RendererProps> {

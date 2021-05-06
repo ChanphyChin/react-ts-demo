@@ -17,7 +17,8 @@ export const CustomerTextEditor = (props: CustomerTextEditorProps) => {
     const onFinish = (values: Values) => {
         const { onRerenderIframe } = props;
         console.log('Success:', values);
-        onRerenderIframe(values);
+        const params = { ...values, color };
+        onRerenderIframe(params);
     };
     
     const onFinishFailed = (errorInfo: any) => {
