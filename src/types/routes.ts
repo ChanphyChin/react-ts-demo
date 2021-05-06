@@ -4,4 +4,5 @@ export interface IRoute {
     component: React.ComponentClass<unknown> | React.SFC<unknown> | React.ComponentClass<any> | React.FC<any> ;
     auth?: boolean;
     children?: IRoute[];
+    isMenu?: boolean;
 };
