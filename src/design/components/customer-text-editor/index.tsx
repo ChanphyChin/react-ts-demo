@@ -2,28 +2,27 @@ import { Form, Input, Button, Card, Slider } from 'antd';
 import { ChromePicker } from 'react-color';
 import { useState, CSSProperties } from 'react';
 
+import { CustomerTextConfig } from '../../../types';
+
 interface CustomerTextEditorProps {
     config: string;
-    onRerenderIframe: (values: Values) => void;
+    onRerenderIframe: (config: CustomerTextConfig) => void;
 }
 
-interface Values {
-    [key: string]: any;
-}
 
 export const CustomerTextEditor = (props: CustomerTextEditorProps) => {
     const [color, setColor] = useState('#000');
     const [displayColorPicker, setDisplayColorPicker] = useState(false);
-    const onFinish = (values: Values) => {
+    const onFinish = (config: CustomerTextConfig) => {
         const { onRerenderIframe } = props;
-        console.log('Success:', values);
-        onRerenderIframe(values);
+        const params = { ...config, color };
+        onRerenderIframe(params);
     };
     
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-    const onColorChange = (color: any) => {
+    const onColorChange = (color: { hex: string; }) => {
         setColor(color.hex);
     }
     const popover: CSSProperties = {

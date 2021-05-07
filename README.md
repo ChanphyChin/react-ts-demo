@@ -24,3 +24,11 @@
 4. React.RefObject —— React.createRef创建的类型，只读不可改
 5. React.MutableRefObject —— useRef创建的类型，可以修改
 6. React.FC 函数组件类型
+7. React.MouseEvent 鼠标事件
+8. React.TouchEvent 触摸事件
+
+## steps 可视化模板装修
+1. 运行`yarn mock`开启本地服务
+2. 运行`yarn start`开启`dev`调试环境
+3. 运行可视化编辑项目 [地址](git@github.com:ChanphyChin/taro-demo.git)
+

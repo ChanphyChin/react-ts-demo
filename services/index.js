@@ -1,12 +1,13 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const multer = require("multer");
 const app = express()
 const port = 4000
 
 var allowCors = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Headers', 'x-requested-with,Authorization,Content-Type');
     res.header('Access-Control-Allow-Credentials','true');
     next();
   };
@@ -17,6 +18,17 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 let token;
 let user = {};
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'services/images/')
+    },
+    filename: function (req, file, cb) {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+})
+
+const upload = multer({storage})
 
 app.get('/user_info', (req, res) => {
   res.send(user);
@@ -39,6 +51,12 @@ app.post('/login', function (req, res) {
 app.post('/logout', function (req, res) {
     token = null;
     res.send({ success: 'logout success'})
+})
+
+app.post('/upload',upload.single('image'), function (req, res) {
+    console.log(req);
+    const url = ` http://localhost:${port}/${req.file.filename}`;
+    res.send(url);
 })
 
 app.get('/home_routes', (req, res) => {

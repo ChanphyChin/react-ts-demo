@@ -1,15 +1,11 @@
 import { Component } from 'react';
 
-import { CustomerTextEditor } from '../components';
+import { CustomerTextEditor, CustomerSwiperEditor } from '../components';
+import { MessageDataInterface } from '../../types';
 
 interface RendererProps {
-    messageData: {
-        config: {
-            component: string;
-            config: string;
-        }
-    } | undefined;
-    onRerenderIframe: () => void;
+    messageData: MessageDataInterface | undefined;
+    onRerenderIframe: (config: any) => void;
 }
 
 export class Renderer extends Component<RendererProps> {
@@ -20,6 +16,8 @@ export class Renderer extends Component<RendererProps> {
             switch(component) {
                 case 'CustomerText':
                 return <CustomerTextEditor config={config} onRerenderIframe={onRerenderIframe} />
+                case 'CustomerSwiper':
+                return <CustomerSwiperEditor config={config} onRerenderIframe={onRerenderIframe} />
             }
         }
         return null;
