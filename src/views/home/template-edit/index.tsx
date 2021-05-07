@@ -3,22 +3,18 @@ import { Button } from 'antd';
 import { cloneDeep } from 'lodash';
 import { Renderer } from '../../../design';
 import { IframeManager } from '../../../services';
+import { MessageDataInterface, ComponentConfigInterface } from '../../../types';
 
-interface MessageDataInterface {
-  config: {
-    component: string;
-    config: string;
-  },
-  index: number;
-  items: any[]; 
+interface TemplateEditState {
+  messageData: MessageDataInterface;
 }
 
-export class TemplateEdit extends Component<any, any> {
+export class TemplateEdit extends Component<{}, TemplateEditState> {
   state = {
-    messageData: { config: { component: '', config: '' }, items: [], index: 0 },
+    messageData: { config: { component: '', config: '' }, items: [], index: 0, type: '' },
   }
   iframeRef: any;
-  receiveMessage = (e: any) => {
+  receiveMessage = (e: { data: MessageDataInterface }) => {
     if(!e.data.config) return;
     this.setState({messageData: e.data});
   }
@@ -31,7 +27,7 @@ export class TemplateEdit extends Component<any, any> {
   onSave = () => {
     IframeManager.unSubscrib();
   }
-  onRerenderIframe = (config: any) => {
+  onRerenderIframe = (config: ComponentConfigInterface) => {
     const messageData: MessageDataInterface = cloneDeep(this.state.messageData);
     messageData.config.config = JSON.stringify(config);
     messageData.items[messageData.index].config = JSON.stringify(config);

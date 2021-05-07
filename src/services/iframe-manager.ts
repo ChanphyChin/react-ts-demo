@@ -1,5 +1,5 @@
 export const IframeManager = {
-    src: `${process.env.REACT_APP_IFRAME_ROOT}/#/pages/index/index`,
+    src: `${process.env.REACT_APP_IFRAME_ROOT}/#/pages/index/index?type=edit&page=home`,
     iframe: { postMessage: (message: any, orign: string) => {} },
     callback: (message: any) => {},
     setIframe(iframe: any) {

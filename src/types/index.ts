@@ -1,1 +1,2 @@
-export type { IRoute } from './routes';
+export * from './routes';
+export * from './design';
