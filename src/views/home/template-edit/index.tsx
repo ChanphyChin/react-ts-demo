@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { Button } from 'antd';
 import { cloneDeep } from 'lodash';
 import { Renderer } from '../../../design';
-import { IframeManager } from '../../../services';
+import { IframeManager, api } from '../../../services';
 import { MessageDataInterface, ComponentConfigInterface } from '../../../types';
 
 interface TemplateEditState {
@@ -22,10 +22,17 @@ export class TemplateEdit extends Component<{}, TemplateEditState> {
     IframeManager.subscrib(this.receiveMessage);
   }
   componentWillUnmount() {
-
+    IframeManager.unSubscrib();
   }
   onSave = () => {
-    IframeManager.unSubscrib();
+    let params: MessageDataInterface = cloneDeep(this.state.messageData);
+    params.pageType = 'home';
+    api.post({
+      apiPath: '/admin/update_config',
+      params
+    }).then(res => {
+      
+    })
   }
   onRerenderIframe = (config: ComponentConfigInterface) => {
     const messageData: MessageDataInterface = cloneDeep(this.state.messageData);

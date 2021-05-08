@@ -7,7 +7,7 @@ export const UserCenter = () => {
   const [user, setUser] = useState<{username: string}>({username: ''});
   useEffect(() => {
     api.get({
-      apiPath: '/user_info',
+      apiPath: '/admin/user_info',
     }).then(res => {
       setUser(res);
     })

@@ -19,7 +19,7 @@ export const PublicHeader = (props: PublicHeaderProp) => {
     console.log(key);
     if(key === '/login') {
       api.post({
-        apiPath: '/logout',
+        apiPath: '/admin/logout',
       }).then(res => {
           sessionStorage.removeItem('token');
           history.push('/login');

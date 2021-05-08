@@ -30,7 +30,7 @@ export class Dasheboard extends Component<any, DasheboardState> {
   }
   getDataSource = (page: number) => {
     api.get({
-      apiPath: '/dasheboard_table',
+      apiPath: '/admin/dasheboard_table',
       params: {
         page,
         pageSize: 10

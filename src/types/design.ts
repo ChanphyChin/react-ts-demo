@@ -6,6 +6,7 @@ export interface MessageDataInterface {
     index: number;
     items: any[]; 
     type: string;
+    pageType?: string;
 }
 export interface ComponentConfigInterface {
     [key: string]: any;

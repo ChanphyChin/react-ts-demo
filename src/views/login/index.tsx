@@ -14,7 +14,7 @@ export const Login = () => {
     };
     const onFinish = (values: any) => {
         api.post({
-            apiPath: '/login',
+            apiPath: '/admin/login',
             params: values
         }).then(res => {
             console.log(res, 'res');

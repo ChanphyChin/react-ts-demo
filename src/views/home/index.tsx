@@ -21,7 +21,7 @@ export const Home = () => {
 
     useEffect(() => {
         api.get({
-            apiPath: '/home_routes',
+            apiPath: '/admin/home_routes',
         }).then(res => {
             setRoutes(res);
         });

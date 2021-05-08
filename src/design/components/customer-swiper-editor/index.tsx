@@ -47,7 +47,7 @@ export const CustomerSwiperEditor = (props: CustomerSwiperEditorProps) => {
     const config = JSON.parse(props.config);
 
     const uploadProps = {
-        action: `${process.env.REACT_APP_API_ROOT}/upload`,
+        action: `${process.env.REACT_APP_API_ROOT}/admin/upload`,
         name: 'image',
         onChange: onChange
     }
