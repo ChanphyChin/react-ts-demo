@@ -1,19 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const settoken = require('../token-vertify');
 
-router.post('/', function (req, res) {
+router.post('/', function (req, res, next) {
     const { username, password } = req.body;
-    global.user = req.body;
-    if(username && password) {
-        const token = username + password;
-        global.token = token;
-        res.send({ token})
-    }
-    let errMsg = 'password can not be empty';
-    if(!username) {
-        errMsg = 'user name can not be empty'
-    }
-    res.status(500).send({ error: errMsg })
+    settoken.setToken(username, password).then((data)=>{
+		return res.json({ token: data });
+	})
+	return next();
 })
 
 module.exports = router;

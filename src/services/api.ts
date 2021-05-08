@@ -67,7 +67,8 @@ export const api: Api = {
         }
 
         // 设置请求头
-        customHeaders && req.set(customHeaders);
+        customHeaders = {...customHeaders, authorization: `${sessionStorage.getItem('token')}`}
+        req.set(customHeaders);
 
         return req;
     },
@@ -92,7 +93,6 @@ export const api: Api = {
         return api
             .request(config)
             .then((response: any) => {
-                console.log(response);
                 return response.body;
             })
             .catch(errorHandle);

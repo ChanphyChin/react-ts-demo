@@ -1,3 +1,4 @@
 # dependencies
 /node_modules
 /services/images/
+/services/config/

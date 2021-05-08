@@ -38,7 +38,7 @@ export class TemplateEdit extends Component<{}, TemplateEditState> {
     const messageData: MessageDataInterface = cloneDeep(this.state.messageData);
     messageData.config.config = JSON.stringify(config);
     messageData.items[messageData.index].config = JSON.stringify(config);
-    console.log(messageData);
+    this.setState({messageData});
     IframeManager.postMessage(messageData);
   }
   render() {

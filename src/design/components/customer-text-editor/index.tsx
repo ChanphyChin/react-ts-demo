@@ -1,6 +1,6 @@
 import { Form, Input, Button, Card, Slider } from 'antd';
 import { ChromePicker } from 'react-color';
-import { useState, CSSProperties } from 'react';
+import { useState, CSSProperties, useEffect } from 'react';
 
 import { CustomerTextConfig } from '../../../types';
 
@@ -40,6 +40,12 @@ export const CustomerTextEditor = (props: CustomerTextEditorProps) => {
         setDisplayColorPicker(displayColorPicker)
     }
     const config = JSON.parse(props.config);
+
+    useEffect(() => {
+        const config = JSON.parse(props.config);
+        setColor(config.color);
+    }, []);
+    
     return (
         <Card>
             <Form

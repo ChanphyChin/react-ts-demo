@@ -17,10 +17,9 @@ export const Login = () => {
             apiPath: '/admin/login',
             params: values
         }).then(res => {
-            console.log(res, 'res');
+            sessionStorage.setItem('token', res.token);
+            history.push('/home');
         })
-        sessionStorage.setItem('token', JSON.stringify(values));
-        history.push('/home');
     };
 
     const onFinishFailed = (errorInfo: any) => {
