@@ -1,8 +1,9 @@
 import { Form, Upload, Button, Card, Slider } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useState, CSSProperties } from 'react';
-
+import request from 'superagent';
 import { CustomerSwiperConfig } from '../../../types';
+import { api } from '../../../services';
 
 interface CustomerSwiperEditorProps {
     config: string;
@@ -46,10 +47,28 @@ export const CustomerSwiperEditor = (props: CustomerSwiperEditorProps) => {
     }
     const config = JSON.parse(props.config);
 
+    const  customRequest = (options: { file: any }) => {
+        let formData = new FormData();
+        formData.append('image', options.file);
+        console.log(process.env.REACT_APP_API_ROOT);
+        api.post({
+            apiPath: `/admin/upload`,
+            params: formData,
+            isForm: true
+        });
+        // request.post(`${process.env.REACT_APP_API_ROOT}/admin/upload`)
+        // .type('form')
+        // .send(formData)
+        // .then((err) => {
+        //     console.log(err);
+        // })     
+    }
+
     const uploadProps = {
-        action: `${process.env.REACT_APP_API_ROOT}/admin/upload`,
+        // action: `${process.env.REACT_APP_API_ROOT}/admin/upload`,
         name: 'image',
-        onChange: onChange
+        onChange: onChange,
+        customRequest
     }
 
     return (

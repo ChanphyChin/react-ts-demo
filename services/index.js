@@ -43,7 +43,7 @@ app.use(expressJwt({
         return null;
     }
 }).unless({
-	path: ['/admin/login', '/client/config']//除了这些地址，其他的URL都需要验证
+	path: ['/admin/login', '/client/config', '/admin/upload']//除了这些地址，其他的URL都需要验证
 }));
 
 // 解析token获取用户信息
@@ -53,7 +53,7 @@ app.use(function(req, res, next) {
 		return next();
 	}else{
 		vertoken.verToken(token).then((data)=> {
-			req.data = data;
+			// req.data = data;
 			return next();
 		}).catch((error)=>{
 			return next();

@@ -20,6 +20,7 @@ interface Config {
     customHeaders?: {
         [key:string]: any;
     };
+    isForm?:Boolean;
 }
 
 interface Api {
@@ -42,11 +43,17 @@ export const api: Api = {
             apiPath,
             params = {},
             customHeaders,
+            isForm
         } = config;
-        params = clone(params);
+        // params = clone(params);
         const path = apiRoot + apiPath;
         // @ts-ignore
         let req = request[method](path);
+        
+        // 设置请求头
+        customHeaders = {...customHeaders, authorization: `${sessionStorage.getItem('token')}`}
+        console.log(customHeaders);
+        req.set(customHeaders);
         if (params) {
             switch (method) {
                 case METHOD_GET:
@@ -60,15 +67,15 @@ export const api: Api = {
                 case METHOD_DELETE:
                     break;
                 default:
-                    console.log(params);
-                    req = req.send(params);
+                    console.log(params, isForm);
+                    if(isForm) {
+                        req = req.type('form').send(params);
+                    }else {
+                        req = req.send(params);
+                    }
                     break;
             }
         }
-
-        // 设置请求头
-        customHeaders = {...customHeaders, authorization: `${sessionStorage.getItem('token')}`}
-        req.set(customHeaders);
 
         return req;
     },
@@ -82,13 +89,15 @@ export const api: Api = {
     // WARN: 该方法内使用了指向 api 的 this, 因此不可使用箭头函数；
      // @ts-ignore
     api[method] = function(data: Config, config: Config) {
-        let { apiRoot = baseApiRoot, apiPath, params } = data;
+        let { apiRoot = baseApiRoot, apiPath, params, customHeaders, isForm } = data;
 
         config = Object.assign({}, config, {
             method,
             apiRoot,
             apiPath,
             params,
+            customHeaders,
+            isForm
         });
         return api
             .request(config)

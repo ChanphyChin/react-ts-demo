@@ -6,7 +6,7 @@ const port = 4000
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'services/images/')
+        cb(null, 'services/images')
     },
     filename: function (req, file, cb) {
         cb(null, `${Date.now()}-${file.originalname}`);
@@ -16,6 +16,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 router.post('/', upload.single('image'), function (req, res) {
+    console.log(req);
     const url = ` http://localhost:${port}/static/images/${req.file.filename}`;
     res.send(url);
 })
