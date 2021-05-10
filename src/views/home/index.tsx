@@ -14,7 +14,7 @@ import { api } from '../../services';
 
 const { Sider, Content } = Layout;
 
-const routesRegx = {
+const routesRegx: { [key: string]: any } = {
     '/home/dasheboard': /\/home\/dasheboard/,
     '/home/redux': /\/home\/redux/,
     '/home/template-management': /\/home\/template-management/,
@@ -27,14 +27,19 @@ export const Home = () => {
     const location = useLocation();
 
     useEffect(() => {
-        console.log(location);
         api.get({
             apiPath: '/admin/home_routes',
-        }).then(res => {
-            if(!res.includes(location.pathname)) {
-                history.push('/home/dasheboard');
+        }).then((res: string[]) => {
+            let routeExits: Boolean = false;
+            for(let route of res) {
+                if(routesRegx[route].test(location.pathname)) {
+                    routeExits = true;
+                }
             }
             setRoutes(res);
+            if(!routeExits) {
+                history.push('/home/dasheboard');
+            }
         });
     }, [])
 
