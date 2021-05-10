@@ -15,6 +15,7 @@ export interface CustomerTextConfig {
     color: string;
     fontSize: number;
     text: string;
+    textAlign: string;
 }
 
 export interface CustomerSwiperConfig {

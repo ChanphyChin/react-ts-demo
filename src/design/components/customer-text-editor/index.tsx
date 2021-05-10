@@ -1,4 +1,4 @@
-import { Form, Input, Button, Card, Slider } from 'antd';
+import { Form, Input, Button, Card, Slider, Radio } from 'antd';
 import { ChromePicker } from 'react-color';
 import { useState, CSSProperties, useEffect } from 'react';
 
@@ -45,13 +45,18 @@ export const CustomerTextEditor = (props: CustomerTextEditorProps) => {
         const config = JSON.parse(props.config);
         setColor(config.color);
     }, []);
-    
+
     return (
         <Card>
             <Form
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                initialValues={{ fontSize: config.fontSize, color: config.color, text: config.text }}
+                initialValues={{
+                    fontSize: config.fontSize,
+                    color: config.color,
+                    textAlign: config.textAlign,
+                    text: config.text
+                }}
             >
                 <Form.Item
                     label="Text"
@@ -62,6 +67,13 @@ export const CustomerTextEditor = (props: CustomerTextEditorProps) => {
                 </Form.Item>
                 <Form.Item name="fontSize" label="Font Size">
                     <Slider min={14} max={30}/>
+                </Form.Item>
+                <Form.Item name="textAlign" label="Text Align">
+                    <Radio.Group name="textAlign">
+                        <Radio value='left'>Left</Radio>
+                        <Radio value='center'>Center</Radio>
+                        <Radio value='right'>Right</Radio>
+                    </Radio.Group>
                 </Form.Item>
                 <Form.Item name="color" label="Color">
                     <>

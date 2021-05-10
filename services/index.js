@@ -27,7 +27,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // 静态文件
-app.use('/admin/static', express.static('services'))
+app.use('/static', express.static('services'))
 
 //验证token是否过期并规定哪些路由不用验证
 app.use(expressJwt({
@@ -43,17 +43,17 @@ app.use(expressJwt({
         return null;
     }
 }).unless({
-	path: ['/admin/login', '/client/config', '/admin/upload']//除了这些地址，其他的URL都需要验证
+	path: ['/admin/login', '/client/config']//除了这些地址，其他的URL都需要验证
 }));
 
 // 解析token获取用户信息
 app.use(function(req, res, next) {
-	var token = req.headers['authorization'];
+	var token = req.headers['authorization'] || req.query.token;
 	if(token == undefined){
 		return next();
 	}else{
 		vertoken.verToken(token).then((data)=> {
-			// req.data = data;
+			req.user = data;
 			return next();
 		}).catch((error)=>{
 			return next();

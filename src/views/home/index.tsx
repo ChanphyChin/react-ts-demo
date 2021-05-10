@@ -14,15 +14,26 @@ import { api } from '../../services';
 
 const { Sider, Content } = Layout;
 
+const routesRegx = {
+    '/home/dasheboard': /\/home\/dasheboard/,
+    '/home/redux': /\/home\/redux/,
+    '/home/template-management': /\/home\/template-management/,
+    '/home/template-edit/:id': /\/home\/template-edit\/((?!\/).)*$/
+};
+
 export const Home = () => {
     const [ routes, setRoutes ] = useState<string[]>([]);
     const history = useHistory();
     const location = useLocation();
 
     useEffect(() => {
+        console.log(location);
         api.get({
             apiPath: '/admin/home_routes',
         }).then(res => {
+            if(!res.includes(location.pathname)) {
+                history.push('/home/dasheboard');
+            }
             setRoutes(res);
         });
     }, [])
@@ -90,7 +101,6 @@ export const Home = () => {
                                     return <Route key={item.path} path={item.path} component={item.component}/>
                                 })
                             }
-                            <Redirect from="*" to="/home/dasheboard" /> 
                         </Switch>
                     </Content>
                 </Layout>

@@ -20,7 +20,6 @@ interface Config {
     customHeaders?: {
         [key:string]: any;
     };
-    isForm?:Boolean;
 }
 
 interface Api {
@@ -41,9 +40,8 @@ export const api: Api = {
             method = DEFAULT_METHOD,
             apiRoot,
             apiPath,
-            params = {},
+            params,
             customHeaders,
-            isForm
         } = config;
         // params = clone(params);
         const path = apiRoot + apiPath;
@@ -52,14 +50,14 @@ export const api: Api = {
         
         // 设置请求头
         customHeaders = {...customHeaders, authorization: `${sessionStorage.getItem('token')}`}
-        console.log(customHeaders);
+        
         req.set(customHeaders);
         if (params) {
             switch (method) {
                 case METHOD_GET:
                     forIn(params, (value, key) => {
                         if (isArray(value)) {
-                            params[key] = value.join(',');
+                            params && (params[key] = value.join(','));
                         }
                     });
                     req = req.query(params);
@@ -67,12 +65,7 @@ export const api: Api = {
                 case METHOD_DELETE:
                     break;
                 default:
-                    console.log(params, isForm);
-                    if(isForm) {
-                        req = req.type('form').send(params);
-                    }else {
-                        req = req.send(params);
-                    }
+                    req = req.send(params);
                     break;
             }
         }
@@ -89,7 +82,7 @@ export const api: Api = {
     // WARN: 该方法内使用了指向 api 的 this, 因此不可使用箭头函数；
      // @ts-ignore
     api[method] = function(data: Config, config: Config) {
-        let { apiRoot = baseApiRoot, apiPath, params, customHeaders, isForm } = data;
+        let { apiRoot = baseApiRoot, apiPath, params, customHeaders } = data;
 
         config = Object.assign({}, config, {
             method,
@@ -97,12 +90,11 @@ export const api: Api = {
             apiPath,
             params,
             customHeaders,
-            isForm
         });
         return api
             .request(config)
             .then((response: any) => {
-                return response.body;
+                return response.body || response.text;
             })
             .catch(errorHandle);
     };
