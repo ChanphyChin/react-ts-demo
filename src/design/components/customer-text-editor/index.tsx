@@ -15,7 +15,8 @@ export const CustomerTextEditor = (props: CustomerTextEditorProps) => {
     const [displayColorPicker, setDisplayColorPicker] = useState(false);
     const onFinish = (config: CustomerTextConfig) => {
         const { onRerenderIframe } = props;
-        const params = { ...config, color };
+        const params = {...config, color};
+        console.log(params);
         onRerenderIframe(params);
     };
     
@@ -84,7 +85,7 @@ export const CustomerTextEditor = (props: CustomerTextEditorProps) => {
                         </div> : null }
                     </>
                 </Form.Item>
-                <Form.Item>
+                <Form.Item style={{ textAlign: 'right' }}>
                     <Button type="primary" htmlType="submit">
                         Submit
                     </Button>

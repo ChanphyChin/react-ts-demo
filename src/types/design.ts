@@ -6,6 +6,7 @@ export interface MessageDataInterface {
     index: number;
     items: any[];
     pageType?: string;
+    type: 'add' | 'edit';
 }
 export interface ComponentConfigInterface {
     [key: string]: any;
@@ -19,9 +20,8 @@ export interface CustomerTextConfig {
 }
 
 export interface CustomerSwiperConfig {
-    height: number;
     items: {
         url: string;
-        pic: string;
+        linkInfo: { name: string; url: string; };
     }[]
 }

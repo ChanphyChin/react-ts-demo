@@ -1,21 +1,24 @@
 import { Component } from 'react';
 import { Button } from 'antd';
 import { cloneDeep } from 'lodash';
+import { connect } from 'react-redux';
 import { Renderer } from '../../../design';
 import { IframeManager, api } from '../../../services';
 import { MessageDataInterface, ComponentConfigInterface } from '../../../types';
+import { setMessageData } from '../../../store/action';
 
 interface TemplateEditState {
   messageData: MessageDataInterface;
 }
 
-export class TemplateEdit extends Component<{}, TemplateEditState> {
-  state = {
-    messageData: { config: { component: '', config: '' }, items: [], index: 0, type: '' },
+class Page extends Component<{setMessageData: (msg: MessageDataInterface) => any}, TemplateEditState> {
+  state: TemplateEditState = {
+    messageData: { config: { component: '', config: '' }, items: [], index: 0, type: 'add' },
   }
   iframeRef: any;
   receiveMessage = (e: { data: MessageDataInterface }) => {
-    if(!e.data.config) return;
+    if(!e.data.type) return;
+    this.props.setMessageData(e.data);
     this.setState({messageData: e.data});
   }
   componentDidMount() {
@@ -38,6 +41,7 @@ export class TemplateEdit extends Component<{}, TemplateEditState> {
     const messageData: MessageDataInterface = cloneDeep(this.state.messageData);
     messageData.config.config = JSON.stringify(config);
     messageData.items[messageData.index].config = JSON.stringify(config);
+    console.log(messageData);
     this.setState({messageData});
     IframeManager.postMessage(messageData);
   }
@@ -55,7 +59,7 @@ export class TemplateEdit extends Component<{}, TemplateEditState> {
               <Renderer messageData={messageData} onRerenderIframe={this.onRerenderIframe}/>
             </div>
             <div style={{ flex: 1, textAlign: 'right' }}>
-              <Button type='primary' onClick={this.onSave}>保存</Button>
+              <Button style={{ marginRight: 20 }} type='primary' onClick={this.onSave}>保存</Button>
               <Button style={{ marginRight: 20 }} danger>取消</Button>
             </div>
         </div>
@@ -64,3 +68,12 @@ export class TemplateEdit extends Component<{}, TemplateEditState> {
   }
 }
 
+const mapDispatchToProps = (dispatch: any) => {
+  return {
+    setMessageData: (messageData: MessageDataInterface) => {
+      return dispatch(setMessageData(messageData));
+    }
+  }
+}
+
+export const TemplateEdit = connect(null, mapDispatchToProps)(Page);

@@ -1,6 +1,6 @@
 import { Component } from 'react';
 
-import { CustomerTextEditor, CustomerSwiperEditor } from '../components';
+import { CustomerTextEditor, CustomerSwiperEditor, ComponentSelector } from '../components';
 import { MessageDataInterface } from '../../types';
 
 interface RendererProps {
@@ -11,6 +11,9 @@ interface RendererProps {
 export class Renderer extends Component<RendererProps> {
     render() {
         const { messageData, onRerenderIframe } = this.props;
+        if(messageData?.type === 'add') {
+            return <ComponentSelector />
+        }
         if(messageData && messageData.config) {
             const { config: { component, config } } = messageData;
             switch(component) {

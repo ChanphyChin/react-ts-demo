@@ -55,7 +55,7 @@ export const TemplateManagement = () => {
     ];
     return (
         <div>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table dataSource={dataSource} columns={columns} rowKey={record => record.id} />
         </div>
     );
 }
