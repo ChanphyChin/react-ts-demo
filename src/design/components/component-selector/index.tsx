@@ -1,43 +1,55 @@
 import { Radio, Card, Button } from 'antd';
 import { useState } from 'react';
 import { RadioChangeEvent } from 'antd';
-import { useStore } from 'react-redux';
 import { cloneDeep } from 'lodash';
-import { IframeManager } from '../../../services';
+import { MessageDataInterface } from '../../types';
 
-export const ComponentSelector = () => {
-    const state = useStore().getState();
+interface ComponentSelectorProps {
+    messageData: MessageDataInterface
+    onUpDateConfig: ( messageData: MessageDataInterface ) => void;
+}
+
+export const ComponentSelector = (props: ComponentSelectorProps) => {
     const [value, SetValue] = useState<string>();
     const options = [
         { label: 'Text', value: 'CustomerText' },
         { label: 'Swiper', value: 'CustomerSwiper' },
+        { label: 'Nav', value: 'CustomerNav' },
     ];
     const onChange = (e: RadioChangeEvent) => {
         SetValue(e.target.value);
     }
     const onNext = () => {
-        let messageData = cloneDeep(state.messageData);
+        let config = {
+            component: value as string,
+            config: ''
+        };
         switch(value) {
             case 'CustomerText':
-                const { index, addType } = messageData;
-                const config = {
-                    component: value,
-                    config: '{"text": "Please edit text", "color": "#000", "fontSize": 16, "textAlign": "left"}'
-                };
-                messageData.config = config;
-                if(index === 0) {
-                    addType === 'pre' ?
-                    messageData.items.unshift(config) :
-                    messageData.items.splice(index + 1, 0, config);
-                }else {
-                    addType === 'pre' ?
-                    messageData.items.splice(index, 0, config) :
-                    messageData.items.splice(index + 1, 0, config);
-                }
-                window.postMessage(messageData, '*');
-                IframeManager.postMessage(messageData);
+                config.config = '{"text": "Please edit text", "color": "#000", "fontSize": 16, "textAlign": "left"}';
                 break;
+            case 'CustomerSwiper' :
+                config.config = '{"items":[]}';
+                break;
+            case 'CustomerNav' :
+                config.config = '{"tabList":[]}';
+                break;
+
         }
+
+        let messageData: MessageDataInterface = cloneDeep(props.messageData);
+        const { index, addType } = messageData;
+        messageData.config = config;
+        if(index === 0) {
+            addType === 'pre' ?
+            messageData.items.unshift(config) :
+            messageData.items.splice(index + 1, 0, config);
+        }else {
+            addType === 'pre' ?
+            messageData.items.splice(index, 0, config) :
+            messageData.items.splice(index + 1, 0, config);
+        }
+        props.onUpDateConfig(messageData);
     }
     return (
         <Card>
@@ -53,7 +65,7 @@ export const ComponentSelector = () => {
                 />
             </div>
             <div style={{ textAlign: 'right' }}>
-                <Button onClick={onNext} type='primary'>Next</Button>
+                <Button onClick={onNext} type='primary'>Add</Button>
             </div>
         </Card>
   );

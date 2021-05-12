@@ -3,7 +3,6 @@ import { Layout, Menu, Button } from 'antd';
 import {
     Switch,
     Route,
-    Redirect,
     useHistory,
     useLocation
 } from "react-router-dom";
@@ -41,7 +40,7 @@ export const Home = () => {
                 history.push('/home/dasheboard');
             }
         });
-    }, [])
+    }, [history, location.pathname])
 
     const selectedKeys = useMemo(() => {
         return [location.pathname];

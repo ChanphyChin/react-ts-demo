@@ -2,17 +2,25 @@ import { Form, Input, Button, Card, Slider, Radio } from 'antd';
 import { ChromePicker } from 'react-color';
 import { useState, CSSProperties, useEffect } from 'react';
 
-import { CustomerTextConfig } from '../../../types';
+import { CustomerTextConfig } from '../../types';
 
 interface CustomerTextEditorProps {
     config: string;
     onRerenderIframe: (config: CustomerTextConfig) => void;
 }
 
+const defaultConfig: CustomerTextConfig = {
+    text: '',
+    textAlign: 'left',
+    color: '#000',
+    fontSize: 16
+};
 
 export const CustomerTextEditor = (props: CustomerTextEditorProps) => {
     const [color, setColor] = useState('#000');
+    const [config, setConfig] = useState<CustomerTextConfig>(defaultConfig);
     const [displayColorPicker, setDisplayColorPicker] = useState(false);
+    const [form] = Form.useForm();
     const onFinish = (config: CustomerTextConfig) => {
         const { onRerenderIframe } = props;
         const params = {...config, color};
@@ -40,16 +48,18 @@ export const CustomerTextEditor = (props: CustomerTextEditorProps) => {
     const toglePicker = (displayColorPicker: boolean) => {
         setDisplayColorPicker(displayColorPicker)
     }
-    const config = JSON.parse(props.config);
 
     useEffect(() => {
         const config = JSON.parse(props.config);
+        setConfig(config);
         setColor(config.color);
-    }, []);
+        form.setFieldsValue({...config});
+    }, [props.config, form]);
 
     return (
         <Card>
             <Form
+                form={form}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 initialValues={{

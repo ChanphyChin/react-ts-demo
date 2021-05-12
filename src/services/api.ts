@@ -1,5 +1,5 @@
 import request from 'superagent';
-import { clone, forIn, isArray } from 'lodash';
+import { forIn, isArray } from 'lodash';
 
 export const METHOD_GET: string = 'get';
 export const METHOD_POST: string = 'post';

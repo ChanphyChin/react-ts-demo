@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import { cloneDeep } from 'lodash';
 import { connect } from 'react-redux';
 import { Renderer } from '../../../design';
@@ -34,29 +34,35 @@ class Page extends Component<{setMessageData: (msg: MessageDataInterface) => any
       apiPath: '/admin/update_config',
       params
     }).then(res => {
-      
+      message.success(res.success);
     })
   }
   onRerenderIframe = (config: ComponentConfigInterface) => {
     const messageData: MessageDataInterface = cloneDeep(this.state.messageData);
     messageData.config.config = JSON.stringify(config);
     messageData.items[messageData.index].config = JSON.stringify(config);
-    console.log(messageData);
     this.setState({messageData});
     IframeManager.postMessage(messageData);
   }
+
+  onUpDateConfig = (messageData: MessageDataInterface) => {
+    window.postMessage(messageData, '*');
+    IframeManager.postMessage(messageData);
+  }
+
   render() {
     const { messageData } = this.state;
     return (
       <div style={{ display: 'flex' }}>
         <iframe
+          title='iframe'
           ref={ref => IframeManager.setIframe(ref && ref.contentWindow)}
           style={{ width: 400, height: 700, border: '1px solid' }}
           src={IframeManager.src}
         ></iframe>
         <div style={{ flexGrow: 1, display: 'flex' }}>
             <div style={{ flex: 1 }}>
-              <Renderer messageData={messageData} onRerenderIframe={this.onRerenderIframe}/>
+              <Renderer messageData={messageData} onRerenderIframe={this.onRerenderIframe} onUpDateConfig={this.onUpDateConfig}/>
             </div>
             <div style={{ flex: 1, textAlign: 'right' }}>
               <Button style={{ marginRight: 20 }} type='primary' onClick={this.onSave}>保存</Button>
