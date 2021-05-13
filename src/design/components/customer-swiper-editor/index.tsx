@@ -6,7 +6,7 @@ import cloneDeep from 'lodash/cloneDeep';
 
 import { UrlSelector } from '../index';
 import { CustomerSwiperConfig } from '../../types';
-import { api } from '../../../services';
+import { api } from '../../services/api';
 
 
 interface CustomerSwiperEditorProps {
