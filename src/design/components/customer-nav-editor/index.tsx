@@ -1,17 +1,16 @@
-import { Form, Upload, Button, Card } from 'antd';
-import { UploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Card } from 'antd';
+import { CloseCircleOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { UrlSelector } from '../index';
-import { CustomerSwiperConfig } from '../../types';
-import { api } from '../../services/api';
+import { CustomerNavConfig } from '../../types';
 
 
-interface CustomerSwiperEditorProps {
+interface CustomerNavEditorProps {
     config: string;
-    onRerenderIframe: (config: CustomerSwiperConfig) => void;
+    onRerenderIframe: (config: CustomerNavConfig) => void;
 }
 
 const reorder = (list: any[], startIndex: number, endIndex: number) => {
@@ -22,53 +21,25 @@ const reorder = (list: any[], startIndex: number, endIndex: number) => {
     return result;
 };
 
-export const CustomerSwiperEditor = (props: CustomerSwiperEditorProps) => {
-    const [imgUrl, setImgUrl] = useState<string>('');
+export const CustomerNavEditor = (props: CustomerNavEditorProps) => {
     const [linkInfo, setLinkInfo] = useState<{ name: string, url: string }>();
-    const [items, setItems] = useState<any[]>([]);
-    const onFinish = (config: CustomerSwiperConfig) => {
+    const [tabList, setTabList] = useState<any[]>([]);
+    const [form] = Form.useForm();
+
+    const onFinish = (config: CustomerNavConfig) => {
         const { onRerenderIframe } = props;
-        const params = { items }
+        const params = { tabList }
         onRerenderIframe(params);
     };
     
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-    const onChange = (data: { file: any }) => {
-        if (data.file.status !== 'uploading') {
-            console.log(data.file);
-        }
-    }
     
     useEffect(() => {
         const config = JSON.parse(props.config);
-        setItems(config.items);
+        setTabList(config.tabList);
     }, [props.config]);
-
-    const  customRequest = (options: any) => {
-        let formData = new FormData();
-        formData.append('image', options.file);
-        api.post({
-            apiPath: `/admin/upload`,
-            params: formData,
-        }).then((res:string) => {
-            setImgUrl(res);
-            options.onSuccess();
-        })    
-    }
-
-    const onPreview = (file: any) => {
-        window.open(imgUrl);
-    }
-
-    const uploadProps = {
-        name: 'image',
-        onChange: onChange,
-        customRequest,
-        onPreview: onPreview,
-        maxCount: 1
-    }
 
     const onUrlChange = (linkInfo: {name: string; url:string;}) => {
         setLinkInfo(linkInfo);
@@ -76,40 +47,40 @@ export const CustomerSwiperEditor = (props: CustomerSwiperEditorProps) => {
 
     const onDragEnd = (result: any) => {
         const newItems = reorder(
-            items as any[],
+            tabList as any[],
             result.source.index,
             result.destination.index
         );
-        setItems(newItems);
+        setTabList(newItems);
     }
 
     const onRemoveItem = (index: number) => {
-        const newItems = cloneDeep(items);
+        const newItems = cloneDeep(tabList);
         newItems.splice(index, 1);
-        setItems(newItems);
+        setTabList(newItems);
     }
 
     const onAddItems = () => {
-        if(imgUrl && JSON.stringify(linkInfo) !== '{}') {
-            const newItems = cloneDeep(items) || [];
-            newItems.push({
-                url: imgUrl,
+        const title = form.getFieldValue('title');
+        if(title && JSON.stringify(linkInfo) !== '{}') {
+            const newTabList= cloneDeep(tabList);
+            newTabList.push({
+                title,
                 linkInfo: linkInfo
             });
-            setItems(newItems);
+            setTabList(newTabList);
         }
     }
-
+    
     return (
         <Card>
             <Form
+                form={form}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
             >
-                <Form.Item name="pic" label="Pic" valuePropName='pic'>
-                    <Upload {...uploadProps} listType='picture'>
-                        <Button icon={<UploadOutlined />}>Click to upload</Button>
-                    </Upload>
+                <Form.Item name="title" label="标题">
+                    <Input />
                 </Form.Item>
                 <Form.Item name="url" label="Url">
                     <UrlSelector onUrlChange={onUrlChange}/>
@@ -119,7 +90,7 @@ export const CustomerSwiperEditor = (props: CustomerSwiperEditorProps) => {
                         Add
                     </Button>
                 </Form.Item>
-                <Form.Item label="Swiper List">
+                <Form.Item label="Nav List">
                     <DragDropContext onDragEnd={onDragEnd}>
                         <Droppable droppableId="droppable">
                         {(provided, snapshot) => (
@@ -127,8 +98,8 @@ export const CustomerSwiperEditor = (props: CustomerSwiperEditorProps) => {
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                             >
-                                {items?.map((item, index) => (
-                                    <Draggable draggableId={`${item.linkInfo.name}-${item.url}-${index}`} index={index} key={`${item.linkInfo.name}-${item.url}-${index}`}>
+                                {tabList?.map((item, index) => (
+                                    <Draggable draggableId={`${item.linkInfo.name}-${item.title}-${index}`} index={index} key={`${item.linkInfo.name}-${item.title}-${index}`}>
                                         {(provided, snapshot) => (
                                             <div
                                             ref={provided.innerRef}
@@ -137,8 +108,8 @@ export const CustomerSwiperEditor = (props: CustomerSwiperEditorProps) => {
                                             className='draggable-container'
                                             >
                                                 <Card style={{ margin: '10px 0' }}>
-                                                    <img alt={item.url} src={item.url} style={{ width: 50, marginRight: 20 }}/>
-                                                    {item.linkInfo.name}
+                                                    <span style={{ marginRight: 20 }}>标题: { item.title }</span>
+                                                    跳转至: {item.linkInfo.name}
                                                     <CloseCircleOutlined onClick={() => onRemoveItem(index)} style={{ float: 'right' }} />
                                                 </Card>
                                             </div>

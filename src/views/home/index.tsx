@@ -3,7 +3,6 @@ import { Layout, Menu, Button } from 'antd';
 import {
     Switch,
     Route,
-    Redirect,
     useHistory,
     useLocation
 } from "react-router-dom";
@@ -14,6 +13,14 @@ import { api } from '../../services';
 
 const { Sider, Content } = Layout;
 
+const routesRegx: { [key: string]: any } = {
+    '/home/dasheboard': /\/home\/dasheboard/,
+    '/home/redux': /\/home\/redux/,
+    '/home/template-management': /\/home\/template-management/,
+    '/home/template-edit': /\/home\/template-edit/,
+    // '/home/template-edit/:id': /\/home\/template-edit\/((?!\/).)*$/
+};
+
 export const Home = () => {
     const [ routes, setRoutes ] = useState<string[]>([]);
     const history = useHistory();
@@ -21,11 +28,20 @@ export const Home = () => {
 
     useEffect(() => {
         api.get({
-            apiPath: '/home_routes',
-        }).then(res => {
+            apiPath: '/admin/home_routes',
+        }).then((res: string[]) => {
+            let routeExits: Boolean = false;
+            for(let route of res) {
+                if(routesRegx[route].test(location.pathname)) {
+                    routeExits = true;
+                }
+            }
             setRoutes(res);
+            if(!routeExits) {
+                history.push('/home/dasheboard');
+            }
         });
-    }, [])
+    }, [history, location.pathname])
 
     const selectedKeys = useMemo(() => {
         return [location.pathname];
@@ -90,7 +106,6 @@ export const Home = () => {
                                     return <Route key={item.path} path={item.path} component={item.component}/>
                                 })
                             }
-                            <Redirect from="*" to="/home/dasheboard" /> 
                         </Switch>
                     </Content>
                 </Layout>

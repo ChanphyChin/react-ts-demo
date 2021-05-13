@@ -14,5 +14,8 @@ export const IframeManager = {
     },
     unSubscrib() {
         window.removeEventListener("message", this.callback);
+    },
+    getSrc(page: string) {
+        return `${process.env.REACT_APP_IFRAME_ROOT}/#/pages/index/index?type=edit&page=${page}`;
     }
 }

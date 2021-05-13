@@ -6,12 +6,13 @@ interface dataSourceInterface {
     name: string;
     createTime: string;
     remark: string;
+    type: string;
 }
 
 export const TemplateManagement = () => {
     const history = useHistory();
-    const onEdit = (id: string) => {
-        history.push(`/home/template-edit/${id}`);
+    const onEdit = (type: string) => {
+        history.push(`/home/template-edit?type=${type}`);
     }
     const dataSource: dataSourceInterface[] = [
         {
@@ -19,6 +20,14 @@ export const TemplateManagement = () => {
             name: '首页',
             createTime: '2021-1-1',
             remark: '首页',
+            type: 'home'
+        },
+        {
+            id: '2',
+            name: '店铺页面',
+            createTime: '2021-1-1',
+            remark: '店铺页面',
+            type: 'store'
         },
     ];
     
@@ -45,7 +54,7 @@ export const TemplateManagement = () => {
             render: (text: any, record: dataSourceInterface) => {
                 return(
                     <>
-                        <Button type='primary' onClick={() => onEdit(record.id)}>编辑</Button>
+                        <Button type='primary' onClick={() => onEdit(record.type)}>编辑</Button>
                         <Button type='primary' style={{ margin: '0 10px' }}>预览</Button>
                         <Button danger>删除</Button>
                     </>
@@ -55,7 +64,7 @@ export const TemplateManagement = () => {
     ];
     return (
         <div>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table dataSource={dataSource} columns={columns} rowKey={record => record.id} />
         </div>
     );
 }

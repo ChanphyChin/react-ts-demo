@@ -4,10 +4,10 @@ import { PublicHeader } from '../../components';
 import { api } from '../../services';
 
 export const UserCenter = () => {
-  const [user, setUser] = useState<{username: string}>({username: ''});
+  const [user, setUser] = useState<{name: string}>({name: ''});
   useEffect(() => {
     api.get({
-      apiPath: '/user_info',
+      apiPath: '/admin/user_info',
     }).then(res => {
       setUser(res);
     })
@@ -16,7 +16,7 @@ export const UserCenter = () => {
     <div>
       <PublicHeader />
       <Card title="User Info" bordered={false} style={{ width: 300 }}>
-        <p>user: {user.username}</p>
+        <p>user: {user.name}</p>
       </Card>
     </div>
   );

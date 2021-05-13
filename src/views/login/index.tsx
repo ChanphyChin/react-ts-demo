@@ -14,13 +14,12 @@ export const Login = () => {
     };
     const onFinish = (values: any) => {
         api.post({
-            apiPath: '/login',
+            apiPath: '/admin/login',
             params: values
         }).then(res => {
-            console.log(res, 'res');
+            sessionStorage.setItem('token', res.token);
+            history.push('/home');
         })
-        sessionStorage.setItem('token', JSON.stringify(values));
-        history.push('/home');
     };
 
     const onFinishFailed = (errorInfo: any) => {

@@ -1,9 +1,18 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const multer = require("multer");
+const json = require('body-parser/lib/types/json');
+const expressJwt = require('express-jwt');
+
+const vertoken = require('./token-vertify');
+
+const adminInterfaces = require('./admin');
+const clientInterfaces = require('./client');
+
+
 const app = express()
 const port = 4000
 
+// 允许跨域
 var allowCors = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
@@ -13,83 +22,59 @@ var allowCors = function(req, res, next) {
   };
 app.use(allowCors);
 
+// 请求参数json化
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-let token;
-let user = {};
+// 静态文件
+app.use('/static', express.static('services'))
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'services/images/')
-    },
-    filename: function (req, file, cb) {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    }
-})
-
-const upload = multer({storage})
-
-app.get('/user_info', (req, res) => {
-  res.send(user);
-})
-
-app.post('/login', function (req, res) {
-    const { username, password } = req.body;
-    user = req.body;
-    if(username && password) {
-        token = username + password;
-        res.send({ token})
-    }
-    let errMsg = 'password can not be empty';
-    if(!username) {
-        errMsg = 'user name can not be empty'
-    }
-    res.status(500).send({ error: errMsg })
-})
-
-app.post('/logout', function (req, res) {
-    token = null;
-    res.send({ success: 'logout success'})
-})
-
-app.post('/upload',upload.single('image'), function (req, res) {
-    console.log(req);
-    const url = ` http://localhost:${port}/${req.file.filename}`;
-    res.send(url);
-})
-
-app.get('/home_routes', (req, res) => {
-    if(!token) {
-        res.status(401).send({ error: 'access denied' })
-    }
-    res.send([
-        '/home/dasheboard',
-        '/home/redux',
-        '/home/template-management',
-        '/home/template-edit/:id'
-    ])
-})
-
-app.get('/dasheboard_table', (req, res) => {
-    const { page, pageSize } = req.query;
-    const totalSize = 45;
-    if(pageSize) {
-        let result = [];
-        const total = (pageSize / 1 + (page - 1) * 10) < totalSize ? (pageSize / 1 + (page - 1) * 10) : totalSize; 
-        for(let i = (page - 1) * 10; i < total; i++) {
-            result.push({
-                key: i + 1,
-                name: `胡彦斌${i + 1}号`,
-                age: i,
-                address: `西湖区湖底公园${i + 1}号`,
-            })
+//验证token是否过期并规定哪些路由不用验证
+app.use(expressJwt({
+	secret: 'mes_qdhd_mobile_xhykjyxgs',
+    // credentialsRequired: true,
+    algorithms: ['HS256'],
+    getToken: function fromHeaderOrQuerystring (req) {
+        if (req.headers.authorization) {
+            return req.headers.authorization;
+        } else if (req.query && req.query.token) {
+          return req.query.token;
         }
-        res.send({ total: Number(totalSize), page: Number(page), result, pageSize: Number(pageSize) })
-    }else {
-        res.send('page size can not be empty');
+        return null;
     }
-})
+}).unless({
+	path: ['/admin/login', '/client/config']//除了这些地址，其他的URL都需要验证
+}));
+
+// 解析token获取用户信息
+app.use(function(req, res, next) {
+	var token = req.headers['authorization'] || req.query.token;
+	if(token == undefined){
+		return next();
+	}else{
+		vertoken.verToken(token).then((data)=> {
+			req.user = data;
+			return next();
+		}).catch((error)=>{
+			return next();
+		})
+	}
+});
+
+//当token失效返回提示信息
+app.use(function(err, req, res, next) {
+	if (err.status == 401) {
+		return res.status(401).send('token失效');
+	}
+});
+
+for(let config of adminInterfaces) {
+    app.use(config.url, config.interface);
+}
+
+for(let config of clientInterfaces) {
+    app.use(config.url, config.interface);
+}
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
