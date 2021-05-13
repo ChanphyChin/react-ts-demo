@@ -3,17 +3,26 @@ import { Button, message } from 'antd';
 import { cloneDeep } from 'lodash';
 import { connect } from 'react-redux';
 import { Renderer } from '../../../design';
-import { IframeManager, api } from '../../../services';
+import { IframeManager, api, getQueryVariable } from '../../../services';
 import { MessageDataInterface, ComponentConfigInterface } from '../../../types';
 import { setMessageData } from '../../../store/action';
 
 interface TemplateEditState {
   messageData: MessageDataInterface;
+  page: string;
 }
 
-class Page extends Component<{setMessageData: (msg: MessageDataInterface) => any}, TemplateEditState> {
+interface TemplateEditProps {
+  setMessageData: (msg: MessageDataInterface) => any;
+  location: any;
+}
+
+const PAGE_TYPES = ['home', 'store'];
+
+class Page extends Component<TemplateEditProps, TemplateEditState> {
   state: TemplateEditState = {
     messageData: { config: { component: '', config: '' }, items: [], index: 0, type: 'add' },
+    page: 'home'
   }
   iframeRef: any;
   receiveMessage = (e: { data: MessageDataInterface }) => {
@@ -22,14 +31,16 @@ class Page extends Component<{setMessageData: (msg: MessageDataInterface) => any
     this.setState({messageData: e.data});
   }
   componentDidMount() {
+    const { location: { search } } = this.props;
     IframeManager.subscrib(this.receiveMessage);
+    this.setState({ page: getQueryVariable(search).type });
   }
   componentWillUnmount() {
     IframeManager.unSubscrib();
   }
   onSave = () => {
     let params: MessageDataInterface = cloneDeep(this.state.messageData);
-    params.pageType = 'home';
+    params.pageType = this.state.page;
     api.post({
       apiPath: '/admin/update_config',
       params
@@ -58,7 +69,7 @@ class Page extends Component<{setMessageData: (msg: MessageDataInterface) => any
           title='iframe'
           ref={ref => IframeManager.setIframe(ref && ref.contentWindow)}
           style={{ width: 400, height: 700, border: '1px solid' }}
-          src={IframeManager.src}
+          src={IframeManager.getSrc(this.state.page)}
         ></iframe>
         <div style={{ flexGrow: 1, display: 'flex' }}>
             <div style={{ flex: 1 }}>

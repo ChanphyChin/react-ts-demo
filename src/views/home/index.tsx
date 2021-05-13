@@ -17,7 +17,8 @@ const routesRegx: { [key: string]: any } = {
     '/home/dasheboard': /\/home\/dasheboard/,
     '/home/redux': /\/home\/redux/,
     '/home/template-management': /\/home\/template-management/,
-    '/home/template-edit/:id': /\/home\/template-edit\/((?!\/).)*$/
+    '/home/template-edit': /\/home\/template-edit/,
+    // '/home/template-edit/:id': /\/home\/template-edit\/((?!\/).)*$/
 };
 
 export const Home = () => {

@@ -50,7 +50,7 @@ export const routesConfig: Array<IRoute> = [
                 isMenu: true
             },
             {
-                path: '/home/template-edit/:id',
+                path: '/home/template-edit',
                 name: 'template management',
                 component: TemplateEdit,
                 auth: true,

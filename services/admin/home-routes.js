@@ -6,7 +6,7 @@ router.get('/', function (req, res) {
         '/home/dasheboard',
         '/home/redux',
         '/home/template-management',
-        '/home/template-edit/:id'
+        '/home/template-edit'
     ])
 })
 

@@ -6,7 +6,11 @@ router.get('/', function (req, res) {
     const pageType = req.query.pageType;
     const fileName = `${pageType}.txt`;
     const configFilePath = `services/config/${fileName}`;
-    res.send(JSON.parse(fs.readFileSync(configFilePath, 'utf-8')));
+    if(!fs.existsSync(configFilePath)) {
+        res.send('');
+    }else {
+        res.send(JSON.parse(fs.readFileSync(configFilePath, 'utf-8')));
+    }
 })
 
 module.exports = router;

@@ -7,7 +7,8 @@ interface UrlSelectorProps {
 const { Option } = Select;
 
 const linkOptions = [
-    {'name': 'home', 'url': 'http://localhost:10086/#/pages/index/index?type=edit&page=home'}
+    {'name': 'home', 'url': '/pages/index/index?page=home'},
+    {'name': 'store', 'url': '/pages/index/index?page=store'},
 ]
 
 export const UrlSelector = (props: UrlSelectorProps) => {
