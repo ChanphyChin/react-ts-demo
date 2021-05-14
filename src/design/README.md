@@ -8,10 +8,9 @@
 
 ## Steps
 
-1. 在`components`下新建编辑组件
-2. 在前台项目增加对应的渲染组件
+1. 在`components`下新建编辑组件（在前台项目增加对应的渲染组件）,在`component/index`导出
+2. 在`renderer`组件引入新增编辑组件，通过约定好配置文件中的`component`属性进行渲染
 3. 在`components/component-selector` `options` `onNext` 配置项增加编辑组件配置新增逻辑
-4. 在渲染器`renderer` 引用新增好的编辑组件
 
 ## Notice
 

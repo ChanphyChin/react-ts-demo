@@ -5,14 +5,8 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { UrlSelector } from '../index';
-import { CustomerSwiperConfig } from '../../types';
+import { CustomerSwiperConfig, DesignConfig } from '../../types';
 import { api } from '../../services/api';
-
-
-interface CustomerSwiperEditorProps {
-    config: string;
-    onRerenderIframe: (config: CustomerSwiperConfig) => void;
-}
 
 const reorder = (list: any[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
@@ -22,7 +16,7 @@ const reorder = (list: any[], startIndex: number, endIndex: number) => {
     return result;
 };
 
-export const CustomerSwiperEditor = (props: CustomerSwiperEditorProps) => {
+export const CustomerSwiperEditor = (props: DesignConfig<CustomerSwiperConfig>) => {
     const [imgUrl, setImgUrl] = useState<string>('');
     const [linkInfo, setLinkInfo] = useState<{ name: string, url: string }>();
     const [items, setItems] = useState<any[]>([]);
@@ -52,8 +46,8 @@ export const CustomerSwiperEditor = (props: CustomerSwiperEditorProps) => {
         api.post({
             apiPath: `/admin/upload`,
             params: formData,
-        }).then((res:string) => {
-            setImgUrl(res);
+        }).then((res:{ url: string; name: string; }) => {
+            setImgUrl(res.url);
             options.onSuccess();
         })    
     }

@@ -15,24 +15,29 @@ export const ComponentSelector = (props: ComponentSelectorProps) => {
         { label: 'Text', value: 'CustomerText' },
         { label: 'Swiper', value: 'CustomerSwiper' },
         { label: 'Nav', value: 'CustomerNav' },
+        { label: 'Banner', value: 'CustomerBanner' },
     ];
     const onChange = (e: RadioChangeEvent) => {
         SetValue(e.target.value);
     }
     const onNext = () => {
+        if(!value) return;
         let config = {
             component: value as string,
             config: ''
         };
         switch(value) {
             case 'CustomerText':
-                config.config = '{"text": "Please edit text", "color": "#000", "fontSize": 16, "textAlign": "left"}';
+                config.config = '{}';
                 break;
             case 'CustomerSwiper' :
                 config.config = '{"items":[]}';
                 break;
             case 'CustomerNav' :
                 config.config = '{"tabList":[]}';
+                break;
+            case 'CustomerBanner' :
+                config.config = '{}';
                 break;
 
         }

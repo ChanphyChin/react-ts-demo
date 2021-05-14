@@ -1,6 +1,12 @@
 import { Component } from 'react';
 
-import { CustomerTextEditor, CustomerSwiperEditor, ComponentSelector, CustomerNavEditor } from '../components';
+import {
+    CustomerTextEditor,
+    CustomerSwiperEditor,
+    ComponentSelector,
+    CustomerNavEditor,
+    CustomerBannerEditor
+} from '../components';
 import { MessageDataInterface } from '../types';
 
 interface RendererProps {
@@ -24,6 +30,8 @@ export class Renderer extends Component<RendererProps> {
                 return <CustomerSwiperEditor config={config} onRerenderIframe={onRerenderIframe} />
                 case 'CustomerNav':
                 return <CustomerNavEditor config={config} onRerenderIframe={onRerenderIframe} />
+                case 'CustomerBanner':
+                return <CustomerBannerEditor config={config} onRerenderIframe={onRerenderIframe} />
             }
         }
         return null;

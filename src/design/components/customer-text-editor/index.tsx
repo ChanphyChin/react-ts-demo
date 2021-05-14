@@ -2,12 +2,7 @@ import { Form, Input, Button, Card, Slider, Radio } from 'antd';
 import { ChromePicker } from 'react-color';
 import { useState, CSSProperties, useEffect } from 'react';
 
-import { CustomerTextConfig } from '../../types';
-
-interface CustomerTextEditorProps {
-    config: string;
-    onRerenderIframe: (config: CustomerTextConfig) => void;
-}
+import { CustomerTextConfig, DesignConfig } from '../../types';
 
 const defaultConfig: CustomerTextConfig = {
     text: '',
@@ -16,7 +11,7 @@ const defaultConfig: CustomerTextConfig = {
     fontSize: 16
 };
 
-export const CustomerTextEditor = (props: CustomerTextEditorProps) => {
+export const CustomerTextEditor = (props: DesignConfig<CustomerTextConfig>) => {
     const [color, setColor] = useState('#000');
     const [config, setConfig] = useState<CustomerTextConfig>(defaultConfig);
     const [displayColorPicker, setDisplayColorPicker] = useState(false);

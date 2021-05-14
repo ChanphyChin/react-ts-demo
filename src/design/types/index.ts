@@ -9,6 +9,12 @@ export interface MessageDataInterface {
     type: 'add' | 'edit';
     addType?: 'pre' | 'next';
 }
+
+export interface DesignConfig<T> {
+    config: string;
+    onRerenderIframe: (config: T) => void;
+}
+
 export interface ComponentConfigInterface {
     [key: string]: any;
 }
