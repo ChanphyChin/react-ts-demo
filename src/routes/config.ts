@@ -28,13 +28,13 @@ export const routesConfig: Array<IRoute> = [
         component: Home,
         auth: true,
         children: [
-            {
-                path: '/home/dasheboard',
-                name: 'dasheboard',
-                component: Dasheboard,
-                auth: true,
-                isMenu: true
-            },
+            // {
+            //     path: '/home/dasheboard',
+            //     name: 'dasheboard',
+            //     component: Dasheboard,
+            //     auth: true,
+            //     isMenu: true
+            // },
             {
                 path: '/home/redux',
                 name: 'redux',

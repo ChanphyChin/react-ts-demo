@@ -46,14 +46,16 @@ export class Home extends Component<HomeProps> {
                 }
             }
             if(!routeExits) {
-                history.push('/home/dasheboard');
+                history.push(res[0]);
+                this.setState({ selectedKeys: [res[0]] });
+            }else {
+                if(location.pathname.includes('template')) {
+                    this.setState({ selectedKeys: ['/home/template-management'] });
+                }else {
+                    this.setState({ selectedKeys: [location.pathname] });
+                }
             }
         });
-        if(location.pathname.includes('template')) {
-            this.setState({ selectedKeys: ['/home/template-management'] });
-        }else {
-            this.setState({ selectedKeys: [location.pathname] });
-        }
     }
 
     render() {
