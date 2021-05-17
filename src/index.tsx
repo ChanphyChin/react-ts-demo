@@ -13,7 +13,7 @@ import { store } from './store';
 import './index.scss';
 import './services';
 import reportWebVitals from './reportWebVitals';
-import { baseRoutesConfig, routesConfig } from './routes';
+import { baseRoutesConfig, routesConfig, RouteWithSubRoutes } from './routes';
 
 ReactDOM.render(
   <Provider store={store}>
@@ -24,7 +24,7 @@ ReactDOM.render(
               return <Route key={route.path} path={route.path} component={route.component} />
             })}
             {routesConfig.map(route => {
-              return <Route key={route.path} path={route.path} component={route.component} />
+              return <RouteWithSubRoutes key={route.path} {...route}/>
             })}
             <Redirect from='*' to='/home' />
         </Switch>

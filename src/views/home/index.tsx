@@ -1,15 +1,13 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
-import { Layout, Menu, Button } from 'antd';
+import { Component} from 'react';
+import { Layout, Menu } from 'antd';
+import { PublicHeader } from '../../components';
+import { RouteWithSubRoutes } from '../../routes';
+import { api } from '../../services';
+import { IRoute } from '../../types';
+
 import {
     Switch,
-    Route,
-    useHistory,
-    useLocation
-} from "react-router-dom";
-import { routesConfig } from '../../routes';
-import { IRoute } from '../../types';
-import { PublicHeader } from '../../components';
-import { api } from '../../services';
+  } from "react-router-dom";
 
 const { Sider, Content } = Layout;
 
@@ -21,12 +19,23 @@ const routesRegx: { [key: string]: any } = {
     // '/home/template-edit/:id': /\/home\/template-edit\/((?!\/).)*$/
 };
 
-export const Home = () => {
-    const [ routes, setRoutes ] = useState<string[]>([]);
-    const history = useHistory();
-    const location = useLocation();
+interface HomeProps {
+    [key: string]: any;
+}
 
-    useEffect(() => {
+export class Home extends Component<HomeProps> {
+    state = {
+        selectedKeys: []
+    }
+
+    onMenuChange = (key: string) => {
+        const { history } = this.props;
+        this.setState({ selectedKeys: key });
+        history.push(key);
+    }
+
+    componentDidMount() {
+        const { location, history } = this.props;
         api.get({
             apiPath: '/admin/home_routes',
         }).then((res: string[]) => {
@@ -36,83 +45,55 @@ export const Home = () => {
                     routeExits = true;
                 }
             }
-            setRoutes(res);
             if(!routeExits) {
                 history.push('/home/dasheboard');
             }
         });
-    }, [history, location.pathname])
-
-    const selectedKeys = useMemo(() => {
-        return [location.pathname];
-    }, [location.pathname]);
-
-    const homeRoutes = routesConfig.find(item => item.name === 'home');
-    const homeChildrenRoutes: Array<IRoute> | undefined = useMemo(() => {
-        return (homeRoutes && homeRoutes.children) || [];
-    }, [homeRoutes]);
-    // 从接口获取路由
-    const getRoutes = useCallback(() => {
-        const currentRoutes = routes.reduce((result: IRoute[], path: string) => {
-            for(let child of homeChildrenRoutes) {
-                if(child.path === path) {
-                    result.push(child);
-                }
-            }
-            return result;
-        }, []);
-        return currentRoutes;
-    }, [routes, homeChildrenRoutes]);
-    
-    // 使用本地路由
-    // const getRoutes = () => {
-    //     return homeChildrenRoutes;
-    // }
-
-    const onMenuChange = (key: string) => {
-        history.push(key);
+        if(location.pathname.includes('template')) {
+            this.setState({ selectedKeys: ['/home/template-management'] });
+        }else {
+            this.setState({ selectedKeys: [location.pathname] });
+        }
     }
 
-    const childrenRoutes: Array<IRoute> = getRoutes();
-
-    return (
-        <Layout style={{ height: '100%' }}>
-            <PublicHeader />
-            <Content>
-                <Layout style={{ height: '100%' }}>
-                    <Sider trigger={null} collapsible>
-                        <div className="logo" />
-                        <Menu theme="dark" mode="inline" selectedKeys={selectedKeys} onSelect={({ key }) => onMenuChange(key as string)}>
-                            {homeChildrenRoutes.filter(item => item.isMenu).map(item => (
-                                <Menu.Item key={item.path} >
-                                    {item.name}
-                                </Menu.Item>
-                            ))}
-                        </Menu>
-                    </Sider>
-                <Layout className="site-layout">
-                    <Content
-                    className="site-layout-background"
-                    style={{
-                        margin: '24px 16px',
-                        padding: 24,
-                        minHeight: 280,
-                    }}
-                    >
-                        {!routes.length && <Button>获取子路由</Button>}
-                        <Switch>
-                            {
-                                childrenRoutes.map(item => {
-                                    return <Route key={item.path} path={item.path} component={item.component}/>
-                                })
-                            }
-                        </Switch>
-                    </Content>
-                </Layout>
-                </Layout>
-            </Content>
-        </Layout>
-    );
+    render() {
+        const { routes = [] } = this.props;
+        return (
+            <Layout style={{ height: '100%' }}>
+                <PublicHeader />
+                <Content>
+                    <Layout style={{ height: '100%' }}>
+                        <Sider trigger={null} collapsible>
+                            <div className="logo" />
+                            <Menu theme="dark" mode="inline" selectedKeys={this.state.selectedKeys} onSelect={({ key }) => this.onMenuChange(key as string)}>
+                                {routes.filter((item: IRoute) => item.isMenu).map((item: IRoute) => (
+                                    <Menu.Item key={item.path} >
+                                        {item.name}
+                                    </Menu.Item>
+                                ))}
+                            </Menu>
+                        </Sider>
+                    <Layout className="site-layout">
+                        <Content
+                        className="site-layout-background"
+                        style={{
+                            margin: '24px 16px',
+                            padding: 24,
+                            minHeight: 280,
+                        }}
+                        >
+                            <Switch>
+                                {routes.map((route: IRoute) => {
+                                    return <RouteWithSubRoutes key={route.path} {...route} />
+                                })}
+                            </Switch>
+                        </Content>
+                    </Layout>
+                    </Layout>
+                </Content>
+            </Layout>
+        );
+    }
 }
 
 export { Dasheboard } from './dasheboard';
