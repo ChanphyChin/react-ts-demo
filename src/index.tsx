@@ -10,7 +10,7 @@ import 'antd/dist/antd.css';
 import { Provider } from 'react-redux'
 import { store } from './store';
 
-import './index.less';
+import './index.scss';
 import './services';
 import reportWebVitals from './reportWebVitals';
 import { baseRoutesConfig, routesConfig } from './routes';

@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.12.3",
-    "@craco/craco": "^6.1.1",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
     "@testing-library/jest-dom": "^5.11.4",
@@ -29,7 +28,6 @@
     "body-parser": "^1.19.0",
     "camelcase": "^6.1.0",
     "case-sensitive-paths-webpack-plugin": "2.3.0",
-    "craco-antd": "^1.19.0",
     "css-loader": "4.3.0",
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
@@ -56,6 +54,7 @@
     "jsonwebtoken": "^8.5.1",
     "mini-css-extract-plugin": "0.11.3",
     "multer": "^1.4.2",
+    "node-sass": "^5.0.0",
     "optimize-css-assets-webpack-plugin": "5.0.4",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.2.1",
@@ -93,8 +92,8 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco  build",
+    "start": "react-scripts start",
+    "build": "react-scripts  build",
     "test": "node scripts/test.js",
     "mock": "node ./services/index.js"
   },
