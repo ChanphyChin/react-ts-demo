@@ -16,6 +16,8 @@ const routesRegx: { [key: string]: any } = {
     '/home/redux': /\/home\/redux/,
     '/home/template-management': /\/home\/template-management/,
     '/home/template-edit': /\/home\/template-edit/,
+    '/home/template-management-web': /\/home\/template-management-web/,
+    '/home/template-edit-web': /\/home\/template-edit-web/,
     // '/home/template-edit/:id': /\/home\/template-edit\/((?!\/).)*$/
 };
 
@@ -102,3 +104,5 @@ export { Dasheboard } from './dasheboard';
 export { Redux } from './redux';
 export { TemplateManagement } from './template-management';
 export { TemplateEdit } from './template-edit';
+export { TemplateManagementWeb } from './template-management-web';
+export { TemplateEditWeb } from './template-edit-web';
