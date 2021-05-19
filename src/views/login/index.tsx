@@ -1,7 +1,7 @@
 import { Form, Input, Button, Checkbox } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { api } from '../../services';
-import './index.less';
+import './index.scss';
 
 export const Login = () => {
     const history = useHistory();

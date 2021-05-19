@@ -2,6 +2,7 @@ import { Select } from 'antd';
 
 interface UrlSelectorProps {
     onUrlChange: (linkInfo: { name: string; url: string }) => void;
+    defaultValue?: { name: string; url: string };
 }
 
 const { Option } = Select;
@@ -17,7 +18,7 @@ export const UrlSelector = (props: UrlSelectorProps) => {
         onUrlChange(JSON.parse(linkInfo));
     }
   return (
-    <Select style={{ width: 120 }} onChange={onUrlChange}>
+    <Select value={JSON.stringify(props.defaultValue)} style={{ width: 120 }} onChange={onUrlChange}>
         {linkOptions.map(item => (
             <Option key={JSON.stringify(item)} value={JSON.stringify(item)}>{item.name}</Option>
         ))}

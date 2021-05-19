@@ -3,7 +3,8 @@ import {
     Login,
     Home,
     PageNotFound,
-    Dasheboard,
+    TemplateEditWeb,
+    TemplateManagementWeb,
     UserCenter,
     Redux,
     TemplateManagement,
@@ -28,13 +29,13 @@ export const routesConfig: Array<IRoute> = [
         component: Home,
         auth: true,
         children: [
-            {
-                path: '/home/dasheboard',
-                name: 'dasheboard',
-                component: Dasheboard,
-                auth: true,
-                isMenu: true
-            },
+            // {
+            //     path: '/home/dasheboard',
+            //     name: 'dasheboard',
+            //     component: Dasheboard,
+            //     auth: true,
+            //     isMenu: true
+            // },
             {
                 path: '/home/redux',
                 name: 'redux',
@@ -44,15 +45,29 @@ export const routesConfig: Array<IRoute> = [
             },
             {
                 path: '/home/template-management',
-                name: 'template management',
+                name: '移动端模板管理',
                 component: TemplateManagement,
                 auth: true,
                 isMenu: true
             },
             {
                 path: '/home/template-edit',
-                name: 'template management',
+                name: '移动端模板管理',
                 component: TemplateEdit,
+                auth: true,
+                isMenu: false
+            },
+            {
+                path: '/home/template-management-web',
+                name: 'web端模板管理',
+                component: TemplateManagementWeb,
+                auth: true,
+                isMenu: true
+            },
+            {
+                path: '/home/template-edit-web',
+                name: 'web端模板管理',
+                component: TemplateEditWeb,
                 auth: true,
                 isMenu: false
             },

@@ -23,7 +23,7 @@ const upload = multer({storage})
 
 router.post('/', upload.single('image'), function (req, res) {
     const url = ` http://localhost:${port}/static/images/${req.file.filename}`;
-    res.send(url);
+    res.send({ url, name: req.file.filename });
 })
 
 module.exports = router;

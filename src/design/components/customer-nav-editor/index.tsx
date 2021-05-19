@@ -5,13 +5,8 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import cloneDeep from 'lodash/cloneDeep';
 
 import { UrlSelector } from '../index';
-import { CustomerNavConfig } from '../../types';
+import { CustomerNavConfig, DesignConfig } from '../../types';
 
-
-interface CustomerNavEditorProps {
-    config: string;
-    onRerenderIframe: (config: CustomerNavConfig) => void;
-}
 
 const reorder = (list: any[], startIndex: number, endIndex: number) => {
     const result = Array.from(list);
@@ -21,7 +16,7 @@ const reorder = (list: any[], startIndex: number, endIndex: number) => {
     return result;
 };
 
-export const CustomerNavEditor = (props: CustomerNavEditorProps) => {
+export const CustomerNavEditor = (props: DesignConfig<CustomerNavConfig>) => {
     const [linkInfo, setLinkInfo] = useState<{ name: string, url: string }>();
     const [tabList, setTabList] = useState<any[]>([]);
     const [form] = Form.useForm();

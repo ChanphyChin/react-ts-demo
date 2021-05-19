@@ -2,7 +2,6 @@ const login = require('./login');
 const logout = require('./logout');
 const upload = require('./upload');
 const updateConfig = require('./update-config');
-const dasheboardTable = require('./dasheboard-table');
 const homeRoutes = require('./home-routes');
 const userInfo = require('./user-info');
 
@@ -22,10 +21,6 @@ module.exports = [
     {
         url: '/admin/home_routes',
         interface: homeRoutes
-    },
-    {
-        url: '/admin/dasheboard_table',
-        interface: dasheboardTable
     },
     {
         url: '/admin/upload',
