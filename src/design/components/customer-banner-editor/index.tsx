@@ -104,7 +104,7 @@ export const CustomerBannerEditor = (props: DesignConfig<any>) => {
                         <Button icon={<UploadOutlined />}>Click to upload</Button>
                     </Upload>
                 </Form.Item>
-                <Form.Item>
+                <Form.Item label="Link To" >
                     <UrlSelector onUrlChange={onUrlChange} defaultValue={linkInfo}/>
                 </Form.Item>
                 <Form.Item style={{ textAlign: 'right', marginTop: 20 }}>

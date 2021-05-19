@@ -52,7 +52,11 @@ export class Home extends Component<HomeProps> {
                 this.setState({ selectedKeys: [res[0]] });
             }else {
                 if(location.pathname.includes('template')) {
-                    this.setState({ selectedKeys: ['/home/template-management'] });
+                    let key = '/home/template-management'
+                    if(location.pathname.includes('web')) {
+                        key = '/home/template-management-web';
+                    }
+                    this.setState({ selectedKeys: [key] });
                 }else {
                     this.setState({ selectedKeys: [location.pathname] });
                 }

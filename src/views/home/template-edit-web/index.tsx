@@ -6,6 +6,7 @@ import { Renderer } from '../../../design';
 import { IframeManager, api, getQueryVariable } from '../../../services';
 import { MessageDataInterface, ComponentConfigInterface } from '../../../types';
 import { setMessageData } from '../../../store/action';
+import './index.scss';
 
 interface TemplateEditState {
   messageData: MessageDataInterface;
@@ -70,12 +71,15 @@ class Page extends Component<TemplateEditProps, TemplateEditState> {
           <Button style={{ marginRight: 20 }} danger>取消</Button>
         </div>
         <div style={{ display: 'flex' }}>
-          <iframe
-            title='iframe'
-            ref={ref => IframeManager.setIframe(ref && ref.contentWindow)}
-            style={{ width: 1000, height: 600, border: '1px solid' }}
-            src={`${process.env.REACT_APP_IFRAME_WEB_ROOT}/#/home?type=edit&page=home`}
-          ></iframe>
+          <div className='web-iframe'>
+            <iframe
+              title='iframe'
+              className='web-iframe-content'
+              ref={ref => IframeManager.setIframe(ref && ref.contentWindow)}
+              style={{ width: 1920, height: 920, border: '1px solid' }}
+              src={`${process.env.REACT_APP_IFRAME_WEB_ROOT}/#/home?type=edit&page=home`}
+            ></iframe>
+          </div>
           <div style={{ flexGrow: 1, display: 'flex' }}>
               <div style={{ flex: 1 }}>
                 <Renderer messageData={messageData} onRerenderIframe={this.onRerenderIframe} onUpDateConfig={this.onUpDateConfig}/>
