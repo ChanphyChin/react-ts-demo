@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { api } from '../../services/api';
 
-export const useUpload = () => {
+export const useUpload = (type?: string) => {
     const [imgInfo, setImgInfo] = useState<{url: string; name: string;}>();
     const [fileList, setFileList] = useState<{[key: string]: any}>([]);
 
-    const onChange = (data: { file: any }) => {
+    const onChange = (data: any) => {
         if (data.file.status !== 'uploading') {
-            console.log(data.file);
+            setFileList(data.fileList);
         }
     }
 
@@ -42,7 +42,7 @@ export const useUpload = () => {
         maxCount: 1
     }
 
-    return {
+    const exports: { [key: string]: any } = {
         uploadProps,
         onPreview,
         customRequest,
@@ -50,6 +50,11 @@ export const useUpload = () => {
         imgInfo,
         setImgInfo,
         fileList,
-        setFileList
+        setFileList,
     };
+
+    type && (exports[`setImgInfo${type}`] = setImgInfo);
+    type && (exports[`setFileList${type}`] = setFileList);
+
+    return exports;
 }
