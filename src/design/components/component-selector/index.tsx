@@ -35,7 +35,7 @@ export const ComponentSelector = (props: ComponentSelectorProps) => {
                 config.config = '{"items":[]}';
                 break;
             case 'CustomerNav' :
-                config.config = '{"tabList":[]}';
+                config.config = '{"items":[]}';
                 break;
             case 'CustomerBanner' :
                 config.config = '{}';

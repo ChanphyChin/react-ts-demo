@@ -2,11 +2,10 @@ import { Form, Input, Button, Card, Upload, Radio } from 'antd';
 import { UploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useState, CSSProperties, useEffect } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { UrlSelector } from '../index';
 import { CustomerTextConfig, DesignConfig } from '../../types';
-import { api } from '../../services/api';
+import { useUpload, useDrag } from '../../hooks';
 
 const defaultConfig: CustomerTextConfig = {
     text: '',
@@ -15,21 +14,14 @@ const defaultConfig: CustomerTextConfig = {
     fontSize: 16
 };
 
-const reorder = (list: any[], startIndex: number, endIndex: number) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-  
-    return result;
-};
-
 export const CustomerHeaderEditor = (props: DesignConfig<CustomerTextConfig>) => {
-    const [imgInfo, setImgInfo] = useState<{url: string; name: string;}>();
-    const [fileList, setFileList] = useState<{[key: string]: any}>([]);
     const [tabList, setTabList] = useState<any[]>([]);
     const [linkInfo, setLinkInfo] = useState<{ name: string, url: string }>();
     const [config, setConfig] = useState<CustomerTextConfig>(defaultConfig);
     const [form] = Form.useForm();
+    const { uploadProps, imgInfo, setImgInfo, fileList, setFileList } = useUpload();
+    const { items, setItems, onDragEnd, onRemoveItem, onAddItems } = useDrag({itemParams: {imgInfo, linkInfo}, condition: Boolean(imgInfo && JSON.stringify(linkInfo) !== '{}')});
+
     const onFinish = (config: CustomerTextConfig) => {
         const { onRerenderIframe } = props;
         const params = {...config};
@@ -40,18 +32,6 @@ export const CustomerHeaderEditor = (props: DesignConfig<CustomerTextConfig>) =>
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-    
-    const popover: CSSProperties = {
-        position: 'absolute',
-        zIndex: 2,
-    }
-    const cover: CSSProperties = {
-        position: 'fixed',
-        top: '0px',
-        right: '0px',
-        bottom: '0px',
-        left: '0px',
-    }
 
     useEffect(() => {
         const config = JSON.parse(props.config);
@@ -59,72 +39,9 @@ export const CustomerHeaderEditor = (props: DesignConfig<CustomerTextConfig>) =>
         form.setFieldsValue({...config});
     }, [props.config, form]);
     
-    const  customRequest = (options: any) => {
-        let formData = new FormData();
-        formData.append('image', options.file);
-        api.post({
-            apiPath: `/admin/upload`,
-            params: formData,
-        }).then((res: {url: string; name: string;}) => {
-          setImgInfo(res);
-          setFileList([{
-            uid: '-1',
-            name: res.name,
-            status: 'done',
-            url: res.url,
-            thumbUrl: res.url,
-          }]);
-            options.onSuccess();
-        })    
-    }
-
-    const onPreview = (file: any) => {
-        window.open(imgInfo && imgInfo.url);
-    }
-
-    const onChange = (data: { file: any }) => {
-        if (data.file.status !== 'uploading') {
-            console.log(data.file);
-        }
-    }
-
-    const uploadProps = {
-        name: 'image',
-        onChange: onChange,
-        customRequest,
-        onPreview: onPreview,
-        maxCount: 1,
-    }
 
     const onUrlChange = (linkInfo: {name: string; url:string;}) => {
         setLinkInfo(linkInfo);
-    }
-
-    const onDragEnd = (result: any) => {
-        const newItems = reorder(
-            tabList as any[],
-            result.source.index,
-            result.destination.index
-        );
-        setTabList(newItems);
-    }
-
-    const onRemoveItem = (index: number) => {
-        const newItems = cloneDeep(tabList);
-        newItems.splice(index, 1);
-        setTabList(newItems);
-    }
-
-    const onAddItems = () => {
-        const title = form.getFieldValue('title');
-        if(title && JSON.stringify(linkInfo) !== '{}') {
-            const newTabList= cloneDeep(tabList);
-            newTabList.push({
-                title,
-                linkInfo: linkInfo
-            });
-            setTabList(newTabList);
-        }
     }
 
     return (

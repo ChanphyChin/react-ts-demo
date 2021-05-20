@@ -33,13 +33,13 @@ export interface CustomerTextConfig {
 
 export interface CustomerSwiperConfig {
     items: {
-        url: string;
+        imgInfo: {url: string; name: string;};
         linkInfo: LinkInfo;
     }[]
 }
 
 export interface CustomerNavConfig {
-    tabList: {
+    items: {
         title: string;
         linkInfo: LinkInfo;
     }[]
