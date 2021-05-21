@@ -2,24 +2,16 @@ import { Form, Upload, Button, Card } from 'antd';
 import { UploadOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import cloneDeep from 'lodash/cloneDeep';
 
 import { UrlSelector } from '../index';
 import { CustomerSwiperConfig, DesignConfig } from '../../types';
-import { api } from '../../services/api';
-
-const reorder = (list: any[], startIndex: number, endIndex: number) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-  
-    return result;
-};
+import { useUpload, useDrag } from '../../hooks';
 
 export const CustomerSwiperEditor = (props: DesignConfig<CustomerSwiperConfig>) => {
-    const [imgUrl, setImgUrl] = useState<string>('');
     const [linkInfo, setLinkInfo] = useState<{ name: string, url: string }>();
-    const [items, setItems] = useState<any[]>([]);
+    const { uploadProps, imgInfo } = useUpload();
+    const { items, setItems, onDragEnd, onRemoveItem, onAddItems } = useDrag({itemParams: {imgInfo, linkInfo}, condition: Boolean(imgInfo && JSON.stringify(linkInfo) !== '{}')});;
+
     const onFinish = (config: CustomerSwiperConfig) => {
         const { onRerenderIframe } = props;
         const params = { items }
@@ -29,69 +21,14 @@ export const CustomerSwiperEditor = (props: DesignConfig<CustomerSwiperConfig>) 
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
     };
-    const onChange = (data: { file: any }) => {
-        if (data.file.status !== 'uploading') {
-            console.log(data.file);
-        }
-    }
     
     useEffect(() => {
         const config = JSON.parse(props.config);
         setItems(config.items);
     }, [props.config]);
 
-    const  customRequest = (options: any) => {
-        let formData = new FormData();
-        formData.append('image', options.file);
-        api.post({
-            apiPath: `/admin/upload`,
-            params: formData,
-        }).then((res:{ url: string; name: string; }) => {
-            setImgUrl(res.url);
-            options.onSuccess();
-        })    
-    }
-
-    const onPreview = (file: any) => {
-        window.open(imgUrl);
-    }
-
-    const uploadProps = {
-        name: 'image',
-        onChange: onChange,
-        customRequest,
-        onPreview: onPreview,
-        maxCount: 1
-    }
-
     const onUrlChange = (linkInfo: {name: string; url:string;}) => {
         setLinkInfo(linkInfo);
-    }
-
-    const onDragEnd = (result: any) => {
-        const newItems = reorder(
-            items as any[],
-            result.source.index,
-            result.destination.index
-        );
-        setItems(newItems);
-    }
-
-    const onRemoveItem = (index: number) => {
-        const newItems = cloneDeep(items);
-        newItems.splice(index, 1);
-        setItems(newItems);
-    }
-
-    const onAddItems = () => {
-        if(imgUrl && JSON.stringify(linkInfo) !== '{}') {
-            const newItems = cloneDeep(items) || [];
-            newItems.push({
-                url: imgUrl,
-                linkInfo: linkInfo
-            });
-            setItems(newItems);
-        }
     }
 
     return (
@@ -131,7 +68,7 @@ export const CustomerSwiperEditor = (props: DesignConfig<CustomerSwiperConfig>) 
                                             className='draggable-container'
                                             >
                                                 <Card style={{ margin: '10px 0' }}>
-                                                    <img alt={item.url} src={item.url} style={{ width: 50, marginRight: 20 }}/>
+                                                    <img alt={item.imgInfo?.url} src={item.imgInfo?.url} style={{ width: 50, marginRight: 20 }}/>
                                                     {item.linkInfo.name}
                                                     <CloseCircleOutlined onClick={() => onRemoveItem(index)} style={{ float: 'right' }} />
                                                 </Card>

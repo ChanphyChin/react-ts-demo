@@ -6,6 +6,7 @@ import { Renderer } from '../../../design';
 import { IframeManager, api, getQueryVariable } from '../../../services';
 import { MessageDataInterface, ComponentConfigInterface } from '../../../types';
 import { setMessageData } from '../../../store/action';
+import './index.scss';
 
 interface TemplateEditState {
   messageData: MessageDataInterface;
@@ -15,9 +16,10 @@ interface TemplateEditState {
 interface TemplateEditProps {
   setMessageData: (msg: MessageDataInterface) => any;
   location: any;
+  history: any;
 }
 
-const PAGE_TYPES = ['home', 'store'];
+// const PAGE_TYPES = ['home', 'store'];
 
 class Page extends Component<TemplateEditProps, TemplateEditState> {
   state: TemplateEditState = {
@@ -67,15 +69,18 @@ class Page extends Component<TemplateEditProps, TemplateEditState> {
       <div>
         <div style={{ width: '100%', textAlign: 'right', marginBottom: 10 }}>
           <Button style={{ marginRight: 20 }} type='primary' onClick={this.onSave}>保存</Button>
-          <Button style={{ marginRight: 20 }} danger>取消</Button>
+          <Button onClick={() => this.props.history.push('/home/template-management-web')} style={{ marginRight: 20 }} danger>取消</Button>
         </div>
         <div style={{ display: 'flex' }}>
-          <iframe
-            title='iframe'
-            ref={ref => IframeManager.setIframe(ref && ref.contentWindow)}
-            style={{ width: 1000, height: 600, border: '1px solid' }}
-            src={`${process.env.REACT_APP_IFRAME_WEB_ROOT}/#/home?type=edit&page=home`}
-          ></iframe>
+          <div className='web-iframe'>
+            <iframe
+              title='iframe'
+              className='web-iframe-content'
+              ref={ref => IframeManager.setIframe(ref && ref.contentWindow)}
+              style={{ width: 1920, height: 920, border: '1px solid' }}
+              src={`${process.env.REACT_APP_IFRAME_WEB_ROOT}/#/home?type=edit&page=home`}
+            ></iframe>
+          </div>
           <div style={{ flexGrow: 1, display: 'flex' }}>
               <div style={{ flex: 1 }}>
                 <Renderer messageData={messageData} onRerenderIframe={this.onRerenderIframe} onUpDateConfig={this.onUpDateConfig}/>

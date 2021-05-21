@@ -19,6 +19,11 @@ export interface ComponentConfigInterface {
     [key: string]: any;
 }
 
+export interface ImgInfo {
+    url: string;
+    name: string;
+}
+
 export interface LinkInfo {
     name: string;
     url: string;
@@ -33,14 +38,33 @@ export interface CustomerTextConfig {
 
 export interface CustomerSwiperConfig {
     items: {
-        url: string;
+        imgInfo: ImgInfo;
         linkInfo: LinkInfo;
     }[]
 }
 
 export interface CustomerNavConfig {
-    tabList: {
+    items: {
         title: string;
         linkInfo: LinkInfo;
     }[]
+}
+
+export interface CustomerHeaderConfig {
+    background: {
+        imgInfo: ImgInfo;
+        repeat: string;
+    };
+    nav: {
+        list: {
+            name: string;
+            linkInfo: LinkInfo;
+        }[];
+        backgroundColor: string;
+    };
+    logo: {
+        imgInfo: ImgInfo;
+        linkInfo: LinkInfo;
+        textAlign: string;
+    }
 }

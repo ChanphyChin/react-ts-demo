@@ -5,7 +5,8 @@ import {
     CustomerSwiperEditor,
     ComponentSelector,
     CustomerNavEditor,
-    CustomerBannerEditor
+    CustomerBannerEditor,
+    CustomerHeaderEditor
 } from '../components';
 import { MessageDataInterface } from '../types';
 
@@ -32,6 +33,8 @@ export class Renderer extends Component<RendererProps> {
                 return <CustomerNavEditor config={config} onRerenderIframe={onRerenderIframe} />
                 case 'CustomerBanner':
                 return <CustomerBannerEditor config={config} onRerenderIframe={onRerenderIframe} />
+                case 'CustomerHeader':
+                return <CustomerHeaderEditor config={config} onRerenderIframe={onRerenderIframe} />
             }
         }
         return null;

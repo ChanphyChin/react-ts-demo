@@ -15,9 +15,10 @@ interface TemplateEditState {
 interface TemplateEditProps {
   setMessageData: (msg: MessageDataInterface) => any;
   location: any;
+  history: any;
 }
 
-const PAGE_TYPES = ['home', 'store'];
+// const PAGE_TYPES = ['home', 'store'];
 
 class Page extends Component<TemplateEditProps, TemplateEditState> {
   state: TemplateEditState = {
@@ -77,7 +78,7 @@ class Page extends Component<TemplateEditProps, TemplateEditState> {
             </div>
             <div style={{ flex: 1, textAlign: 'right' }}>
               <Button style={{ marginRight: 20 }} type='primary' onClick={this.onSave}>保存</Button>
-              <Button style={{ marginRight: 20 }} danger>取消</Button>
+              <Button onClick={() => this.props.history.push('/home/template-management')} style={{ marginRight: 20 }} danger>取消</Button>
             </div>
         </div>
       </div>

@@ -30,5 +30,6 @@
 ## steps 可视化模板装修
 1. 运行`yarn mock`开启本地服务
 2. 运行`yarn start`开启`dev`调试环境
-3. 运行可视化编辑项目 [地址](git@github.com:ChanphyChin/taro-demo.git)
+3. 运行可视化编辑移动端项目 [地址](git@github.com:ChanphyChin/taro-demo.git)
+4. 运行可视化编辑PC端项目 [地址](git@github.com:ChanphyChin/web-client.git)
 

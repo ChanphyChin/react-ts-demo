@@ -16,6 +16,7 @@ export const ComponentSelector = (props: ComponentSelectorProps) => {
         { label: 'Swiper', value: 'CustomerSwiper' },
         { label: 'Nav', value: 'CustomerNav' },
         { label: 'Banner', value: 'CustomerBanner' },
+        { label: 'Header', value: 'CustomerHeader' },
     ];
     const onChange = (e: RadioChangeEvent) => {
         SetValue(e.target.value);
@@ -34,9 +35,12 @@ export const ComponentSelector = (props: ComponentSelectorProps) => {
                 config.config = '{"items":[]}';
                 break;
             case 'CustomerNav' :
-                config.config = '{"tabList":[]}';
+                config.config = '{"items":[]}';
                 break;
             case 'CustomerBanner' :
+                config.config = '{}';
+                break;
+            case 'CustomerHeader' :
                 config.config = '{}';
                 break;
 
